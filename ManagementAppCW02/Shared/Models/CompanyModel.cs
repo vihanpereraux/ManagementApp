@@ -26,6 +26,8 @@ namespace ManagementAppCW02.Shared.Models
             this.companyName = companyName;
         }
 
+        public CompanyModel() { }
+
         /*public void CompanyModel(string companyName) 
         {
             this.CompanyName = companyName;

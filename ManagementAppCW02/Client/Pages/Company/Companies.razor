@@ -1,5 +1,73 @@
-﻿<h3>Companies</h3>
+﻿@*Route*@
+@page "/companies"
+
+@*Getting HttpClient class*@
+@inject HttpClient http
+
+@*Accessing shared files*@
+@*Added to the import.razor file also*@
+@using ManagementAppCW02.Shared.Models;
+
+
+<h3 class="mb-5">Companies</h3>
+
+@if (companies == null)
+{
+    <text>Loading</text>
+}
+else if (companies.Length == 0)
+{
+    <text>No Record Found</text>
+}
+else
+{
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th style="text-align:center">Company Name</th>
+                <th style="text-align:center">Company Type</th>
+                <th style="text-align:center">Employees</th>
+                <th style="text-align:center">Actions</th>
+                @*<th>Delete</th>*@
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var company in companies)
+            {
+                <tr>
+                    <td style="text-align:center">
+                        @company.companyName
+                    </td>
+                    <td style="text-align:center">
+                        @company.companyType
+                    </td>
+                    <td style="text-align:center">
+                        @company.numOfEmployees
+                    </td>
+                    <td style="text-align:center">
+                        <button class="btn btn-success">Update</button>
+                        <button class="btn btn-danger" style="margin-left:10px">Delete</button>
+                    </td>
+                </tr>   
+            }
+        </tbody>
+    </table>
+
+    <a class="btn btn-success mt-5" href="/companies/createcompany">Add Copmpany</a>
+}
 
 @code {
+    // An object array of company objects - CompanyModel
+    CompanyModel[] companies { get; set; }
 
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadComapnies();
+    }
+
+    async Task LoadComapnies()
+    {
+        companies = await http.GetFromJsonAsync<CompanyModel[]>("api/company");
+
+    }
 }

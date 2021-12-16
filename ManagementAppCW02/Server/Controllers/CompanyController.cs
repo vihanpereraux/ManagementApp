@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace ManagementAppCW02.Server.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class CompanyController:ControllerBase
     {
         private readonly ILogger<CompanyController> _logger;

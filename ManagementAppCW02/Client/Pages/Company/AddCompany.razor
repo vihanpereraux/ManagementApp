@@ -13,7 +13,12 @@
 
 <h3>Add Company</h3>
 
-<EditForm Model="@company" OnValidSubmit="@CreateCompany">
+<CompanyForm buttonText = "Add Company" companyModel = "@company" OnValidSubmit = "@CreateCompany">
+
+</CompanyForm>
+
+@*<EditForm Model="@company" OnValidSubmit="@CreateCompany">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
 
     <div class="form-group">
         <label class="control-label">Company Name</label>
@@ -35,7 +40,7 @@
 
     <button type="submit" class="btn btn-success">Create Company</button>
 
-</EditForm>
+</EditForm>*@
 
 @code {
     CompanyModel company = new CompanyModel();

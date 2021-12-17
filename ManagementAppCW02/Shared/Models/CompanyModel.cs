@@ -21,10 +21,10 @@ namespace ManagementAppCW02.Shared.Models
         [Required]
         public int numOfEmployees { get; set; }
 
-        public CompanyModel(string companyName)
+        /*public CompanyModel(string companyName)
         {
             this.companyName = companyName;
-        }
+        }*/
 
         public CompanyModel() { }
 

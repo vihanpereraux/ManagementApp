@@ -51,13 +51,26 @@ namespace ManagementAppCW02.Server.Controllers
             return NoContent();
         }
 
-        [HttpDelete]
+        private async Task<CompanyModel> GetCompanyByName(string companyName)
+        {
+            return await _applicationDbContext.Companies
+                .FirstOrDefaultAsync(company => company.companyName == companyName);
+        }
+
+        [HttpDelete("{companyName}")]
         public async Task<ActionResult> Delete(string companyName) 
         {
-            CompanyModel company = new CompanyModel( companyName = companyName );
-            _applicationDbContext.Remove(company);
-            await _applicationDbContext.SaveChangesAsync();
-            return NoContent();
+            var result = await GetCompanyByName(companyName);
+            if (result != null)
+            {
+                _applicationDbContext.Companies.Remove(result);
+                await _applicationDbContext.SaveChangesAsync();
+                return NoContent();
+            }
+            return null;
+
+            /* var company = new CompanyModel( companyName = companyName ); */
+
         }
     }
 }

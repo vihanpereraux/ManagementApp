@@ -13,5 +13,6 @@ namespace ManagementAppCW02.Server.Data
 
         // All the tables come here
         public DbSet<CompanyEntity> Companies { get; set; }
+        public DbSet<ProjectEntity> Projects { get; set; }
     }
 }

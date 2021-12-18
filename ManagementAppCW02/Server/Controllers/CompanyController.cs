@@ -1,8 +1,9 @@
 ﻿using ManagementAppCW02.Server.Data;
+using ManagementAppCW02.Server.Models;
 using ManagementAppCW02.Shared.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
+using System.Collections.Generic;
 
 namespace ManagementAppCW02.Server.Controllers
 {
@@ -12,6 +13,9 @@ namespace ManagementAppCW02.Server.Controllers
     {
         private readonly ILogger<CompanyController> _logger;
         private readonly ApplicationDbContext _applicationDbContext;
+
+        // Should be server model
+        private readonly CompanyModel _companyModel;
 
         public CompanyController(ILogger<CompanyController> logger, ApplicationDbContext applicationDbContext)
         {
@@ -23,6 +27,7 @@ namespace ManagementAppCW02.Server.Controllers
         public async Task<ActionResult<List<CompanyEntity>>> Get() 
         {
             // Fetching all the Companies to a list
+            //return await _companyModel.GetAllCompanies();
             return await _applicationDbContext.Companies.ToListAsync();
         }
 

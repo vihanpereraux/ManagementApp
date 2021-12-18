@@ -4,6 +4,7 @@ using ManagementAppCW02.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManagementAppCW02.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211218124857_fkFieldAddedProperly")]
+    partial class fkFieldAddedProperly
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,7 +26,7 @@ namespace ManagementAppCW02.Server.Migrations
 
             modelBuilder.Entity("ManagementAppCW02.Shared.Entities.CompanyEntity", b =>
                 {
-                    b.Property<Guid>("companyId")
+                    b.Property<Guid>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -42,7 +44,7 @@ namespace ManagementAppCW02.Server.Migrations
                     b.Property<int>("numOfEmployees")
                         .HasColumnType("int");
 
-                    b.HasKey("companyId");
+                    b.HasKey("id");
 
                     b.ToTable("Companies");
                 });
@@ -53,7 +55,7 @@ namespace ManagementAppCW02.Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("companyId")
+                    b.Property<Guid>("Companyid")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("projectDescription")
@@ -73,7 +75,7 @@ namespace ManagementAppCW02.Server.Migrations
 
                     b.HasKey("projectId");
 
-                    b.HasIndex("companyId");
+                    b.HasIndex("Companyid");
 
                     b.ToTable("Projects");
                 });
@@ -82,7 +84,7 @@ namespace ManagementAppCW02.Server.Migrations
                 {
                     b.HasOne("ManagementAppCW02.Shared.Entities.CompanyEntity", "Company")
                         .WithMany("Projects")
-                        .HasForeignKey("companyId")
+                        .HasForeignKey("Companyid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

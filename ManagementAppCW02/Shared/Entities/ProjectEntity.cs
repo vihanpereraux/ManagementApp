@@ -8,27 +8,26 @@ using System.Threading.Tasks;
 
 namespace ManagementAppCW02.Shared.Entities
 {
-    public class CompanyEntity
+    public class ProjectEntity
     {
         [Key]
-        public Guid companyId { get; set; }
+        public Guid projectId { get; set; }
 
         [Required]
-        public string? companyName { get; set; }
+        public string? projectName { get; set; }
 
         [Required]
-        public string? companyType { get; set; }
+        public string? projectDescription { get; set; }
 
         [Required]
-        public int numOfEmployees { get; set; }
+        public string? projectStatus { get; set; }
 
         [DataType(DataType.Date)]
         [Column(TypeName = "Date")]
-        public DateTime establishedDate { get; set; }
+        public DateTime projectStartedDate { get; set; }
 
-        public ICollection<ProjectEntity> Projects { get; set; }
+        public CompanyEntity Company { get; set; }
 
-        public CompanyEntity() { }
-
+        public ProjectEntity() { }
     }
 }

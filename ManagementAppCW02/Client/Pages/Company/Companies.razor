@@ -64,7 +64,7 @@ else
 
 @code {
     // An object array of company objects - CompanyModel
-    CompanyModel[] companies { get; set; }
+    CompanyEntity[] companies { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -73,7 +73,7 @@ else
 
     async Task LoadComapnies()
     {
-        companies = await http.GetFromJsonAsync<CompanyModel[]>("api/company");
+        companies = await http.GetFromJsonAsync<CompanyEntity[]>("api/company");
 
     }
 

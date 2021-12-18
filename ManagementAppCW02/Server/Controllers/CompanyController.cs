@@ -1,7 +1,8 @@
 ﻿using ManagementAppCW02.Server.Data;
-using ManagementAppCW02.Shared.Models;
+using ManagementAppCW02.Shared.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace ManagementAppCW02.Server.Controllers
 {
@@ -19,21 +20,21 @@ namespace ManagementAppCW02.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<CompanyModel>>> Get() 
+        public async Task<ActionResult<List<CompanyEntity>>> Get() 
         {
             // Fetching all the Companies to a list
             return await _applicationDbContext.Companies.ToListAsync();
         }
 
         [HttpGet("{companyName}", Name = "GetCompany")]
-        public async Task<ActionResult<CompanyModel>> Get(string companyName) 
+        public async Task<ActionResult<CompanyEntity>> Get(string companyName) 
         {
             // A Logic applies in the parameteres (checking both properties belong to db's table and client side request)
             return await _applicationDbContext.Companies.FirstOrDefaultAsync(x => x.companyName == companyName);
         }
 
         [HttpPost]
-        public async Task<ActionResult<CompanyModel>> Post(CompanyModel companyModel) 
+        public async Task<ActionResult<CompanyEntity>> Post(CompanyEntity companyModel) 
         {
             //_applicationDbContext.Add(companyModel); --> Used in the YT Tutorial @ 10:33
             _applicationDbContext.Companies.Add(companyModel);
@@ -44,14 +45,14 @@ namespace ManagementAppCW02.Server.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult> Put(CompanyModel companyModel) 
+        public async Task<ActionResult> Put(CompanyEntity companyModel) 
         {
             _applicationDbContext.Entry(companyModel).State = EntityState.Modified;
             await _applicationDbContext.SaveChangesAsync();
             return NoContent();
         }
 
-        private async Task<CompanyModel> GetCompanyByName(string companyName)
+        private async Task<CompanyEntity> GetCompanyByName(string companyName)
         {
             return await _applicationDbContext.Companies
                 .FirstOrDefaultAsync(company => company.companyName == companyName);

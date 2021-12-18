@@ -16,11 +16,11 @@
 @code {
     [Parameter] public string companyName { get; set; }
 
-    CompanyModel company = new CompanyModel();
+    CompanyEntity company = new CompanyEntity();
 
     protected async override Task OnParametersSetAsync()
     {
-        company = await http.GetFromJsonAsync<CompanyModel>($"api/company/{companyName}");
+        company = await http.GetFromJsonAsync<CompanyEntity>($"api/company/{companyName}");
     }
 
     async Task UpdateCompanyByName()

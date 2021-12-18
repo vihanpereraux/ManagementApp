@@ -9,7 +9,7 @@ namespace ManagementAppCW02.Shared.Models
 {
     public class CompanyModel
     {
-        [Key]
+        /*[Key]
         public Guid guid { get; set; }
 
         [Required]
@@ -19,14 +19,14 @@ namespace ManagementAppCW02.Shared.Models
         public string? companyType { get; set; }
 
         [Required]
-        public int numOfEmployees { get; set; }
+        public int numOfEmployees { get; set; }*/
 
         /*public CompanyModel(string companyName)
         {
             this.companyName = companyName;
         }*/
 
-        public CompanyModel() { }
+        /*public CompanyModel() { }*/
 
         /*public void CompanyModel(string companyName) 
         {

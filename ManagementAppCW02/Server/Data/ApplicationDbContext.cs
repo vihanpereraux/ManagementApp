@@ -1,5 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ManagementAppCW02.Shared.Models;
+﻿using ManagementAppCW02.Shared.Entities;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace ManagementAppCW02.Server.Data
 {
@@ -11,6 +12,6 @@ namespace ManagementAppCW02.Server.Data
         }
 
         // All the tables come here
-        public DbSet<CompanyModel> Companies { get; set; }
+        public DbSet<CompanyEntity> Companies { get; set; }
     }
 }

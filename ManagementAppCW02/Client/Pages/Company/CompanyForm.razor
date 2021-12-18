@@ -27,7 +27,7 @@
 </EditForm>
 
 @code {
-    [Parameter] public CompanyModel companyModel { get; set; }
+    [Parameter] public CompanyEntity companyModel { get; set; }
     [Parameter] public string buttonText { get; set; } = "Save Company";
     [Parameter] public EventCallback OnValidSubmit { get; set; }
 }

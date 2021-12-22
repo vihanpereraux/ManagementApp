@@ -4,6 +4,7 @@ using ManagmentAppTestOne.Shared.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -22,30 +23,30 @@ namespace ManagmentAppTestOne.Server.Controllers
             _projectModel = projectModel;
         }
 
-        [HttpGet]
-        public async Task<ActionResult> GetProjects()
+        [HttpGet("{companyId}", Name = "GetProjects")]
+        public async Task<ActionResult> GetProjects(Guid companyId)
         {
-            return Ok(await _projectModel.GetProjects());
+            return Ok(await _projectModel.GetProjects(companyId));
         }
 
-        [HttpGet("{projectName}", Name = "GetProject")]
+        /*[HttpGet("{projectName}", Name = "GetProject")]
         public async Task<ActionResult<CompanyEntity>> Get(string projectName)
         {
             return Ok(await _projectModel.GetProjectByName(projectName));
-        }
+        }*/
 
         [HttpPost]
-        public async Task<ActionResult<ProjectEntity>> Post(ProjectEntity projectModel)
+        public async Task<ActionResult<ProjectEntity>> Post(ProjectEntity project)
         {
-            await _projectModel.Post(projectModel);
-            return new CreatedAtRouteResult("GetProject", new { ProjectName = projectModel.ProjectName }, projectModel);
+            await _projectModel.Post(project);
+            return new CreatedAtRouteResult("GetProject", new { ProjectName = project.ProjectName }, project);
         }
 
         [HttpPut]
-        public async Task<ActionResult> Put(ProjectEntity projectModel)
+        public async Task<ActionResult> Put(ProjectEntity project)
         {
-            await _projectModel.Put(projectModel);
-            return new CreatedAtRouteResult("GetProject", new { ProjectName = projectModel.ProjectName }, projectModel);
+            await _projectModel.Put(project);
+            return new CreatedAtRouteResult("GetProject", new { ProjectName = project.ProjectName }, project);
         }
 
         [HttpDelete("{projectName}")]

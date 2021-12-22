@@ -26,6 +26,9 @@ namespace ManagmentAppTestOne.Shared.Entities
 
         [Required]
         [DataType(DataType.Password)]
-        public string UserPassword { get; set; }    
+        public string UserPassword { get; set; }
+
+        //Referencing the parent table for Collaboration Entity
+        public ICollection<CollaborationEntity> Collaborations { get; set; }
     }
 }

@@ -1,0 +1,31 @@
+﻿@page "/projects/edit/{projectName}"
+
+@*Getting HttpClient class*@
+@inject HttpClient http
+
+@*For redirecting purposes*@
+@inject NavigationManager Navigation
+
+<h3>Update Project</h3>
+
+<ProjectForm buttonText = "Update Project" project = "@project" OnValidSubmit = "@UpdateProjectByName">
+
+</ProjectForm>
+
+@code {
+
+    [Parameter] public string projectName { get; set; }
+
+    ProjectEntity project = new ProjectEntity();
+
+    protected async override Task OnParametersSetAsync()
+    {
+        project = await http.GetFromJsonAsync<ProjectEntity>($"api/project/{projectName}");
+    }
+
+    async Task UpdateProjectByName()
+    {
+        await http.PutAsJsonAsync("api/project", project);
+        Navigation.NavigateTo("/companies");
+    }
+}

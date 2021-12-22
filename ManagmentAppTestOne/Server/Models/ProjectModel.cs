@@ -2,7 +2,9 @@
 using ManagmentAppTestOne.Shared.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ManagmentAppTestOne.Server.Models
@@ -18,9 +20,11 @@ namespace ManagmentAppTestOne.Server.Models
             _applicationDbContext = applicationDbContext;
         }
 
-        public async Task<IEnumerable<ProjectEntity>> GetProjects()
+        public async Task<IEnumerable<ProjectEntity>> GetProjects(Guid companyId)
         {
-            return await _applicationDbContext.Projects.ToListAsync();
+            //return await _applicationDbContext.Projects.ToListAsync();
+            return await _applicationDbContext.Projects.Where(x => x.CompanyId == companyId).ToListAsync();
+            //return projects;
         }
 
         public async Task<ProjectEntity> GetProjectByName(string projectName)
@@ -28,18 +32,18 @@ namespace ManagmentAppTestOne.Server.Models
             return await _applicationDbContext.Projects.FirstOrDefaultAsync(x => x.ProjectName == projectName);
         }
 
-        public async Task<ProjectEntity> Post(ProjectEntity projectModel)
+        public async Task<ProjectEntity> Post(ProjectEntity project)
         {
-            var result = _applicationDbContext.Projects.Add(projectModel);
+            var result = _applicationDbContext.Projects.Add(project);
             await _applicationDbContext.SaveChangesAsync();
             return result.Entity;
         }
 
-        public async Task<ProjectEntity> Put(ProjectEntity projectModel)
+        public async Task<ProjectEntity> Put(ProjectEntity project)
         {
-            _applicationDbContext.Entry(projectModel).State = EntityState.Modified;
+            _applicationDbContext.Entry(project).State = EntityState.Modified;
             await _applicationDbContext.SaveChangesAsync();
-            return projectModel;
+            return project;
         }
 
         /*private async Task<ProjectEntity> GetProjectByName(string projectName)

@@ -1,0 +1,39 @@
+﻿@page "/companies/companyform"
+
+
+<EditForm Model="@company" OnValidSubmit="@OnValidSubmit">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+
+    <div class="form-group">
+        <label class="control-label">Company Name</label>
+        <InputText @bind-Value="company.CompanyName"></InputText>
+        <ValidationMessage For="@(() => company.CompanyName)" />
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Company Type</label>
+        <InputText @bind-Value="company.CompanyDescription"></InputText>
+        <ValidationMessage For="@(() => company.CompanyDescription)" />
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Established Date</label>
+        <InputDate  @bind-Value="company.EstablishedDate"></InputDate>
+        <ValidationMessage For="@(() => company.EstablishedDate)" />
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Number of Employees</label>
+        <InputNumber  @bind-Value="company.NumOfEmployees"></InputNumber>
+        <ValidationMessage For="@(() => company.NumOfEmployees)" />
+    </div>
+
+    <button type="submit" class="btn btn-success">@buttonText</button>
+
+</EditForm>
+
+@code {
+    [Parameter] public CompanyEntity company { get; set; }
+    [Parameter] public string buttonText { get; set; } = "Save Company";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+}

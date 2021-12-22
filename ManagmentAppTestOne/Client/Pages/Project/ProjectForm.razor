@@ -1,0 +1,39 @@
+﻿@page "/projects/projectform"
+
+
+<EditForm Model="@project" OnValidSubmit="@OnValidSubmit">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+
+    <div class="form-group">
+        <label class="control-label">Project Name</label>
+        <InputText @bind-Value="project.ProjectName"></InputText>
+        <ValidationMessage For="@(() => project.ProjectName)" />
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Project Details</label>
+        <InputText @bind-Value="project.ProjectDescription"></InputText>
+        <ValidationMessage For="@(() => project.ProjectDescription)" />
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Started Date</label>
+        <InputDate  @bind-Value="project.ProjectStartedDate"></InputDate>
+        <ValidationMessage For="@(() => project.ProjectStartedDate)" />
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Project Status</label>
+        <InputText  @bind-Value="project.ProjectStatus"></InputText>
+        <ValidationMessage For="@(() => project.ProjectStatus)" />
+    </div>
+
+    <button type="submit" class="btn btn-success">@buttonText</button>
+
+</EditForm>
+
+@code {
+    [Parameter] public ProjectEntity project { get; set; }
+    [Parameter] public string buttonText { get; set; } = "Save Project";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+}

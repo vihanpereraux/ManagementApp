@@ -1,0 +1,31 @@
+﻿@page "/companies/edit/{companyName}"
+
+@*Getting HttpClient class*@
+@inject HttpClient http
+
+@*For redirecting purposes*@
+@inject NavigationManager Navigation
+
+<h3>Update Company</h3>
+
+<CompanyForm buttonText = "Update Company" company = "@company" OnValidSubmit = "@UpdateCompanyByName">
+
+</CompanyForm>
+
+
+@code {
+    [Parameter] public string companyName { get; set; }
+
+    CompanyEntity company = new CompanyEntity();
+
+    protected async override Task OnParametersSetAsync()
+    {
+        company = await http.GetFromJsonAsync<CompanyEntity>($"api/company/{companyName}");
+    }
+
+    async Task UpdateCompanyByName()
+    {
+        await http.PutAsJsonAsync("api/company", company);
+        Navigation.NavigateTo("/companies");
+    }
+}

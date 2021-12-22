@@ -1,0 +1,102 @@
+﻿@*Route*@
+@page "/projects/{companyId:guid}"
+
+@*Getting HttpClient class*@
+@inject HttpClient http
+
+@*For JS confirmations*@
+@inject IJSRuntime js
+
+@*For redirecting purposes*@
+@inject NavigationManager Navigation
+
+
+<h3 class="mb-5">Projects</h3>
+
+@if (projects == null)
+{
+    <text>Loading..</text>
+}
+else if (projects.Length == 0)
+{
+    <text>No Record Found</text>
+}
+else
+{
+    <table class="table table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th style="text-align:center">Project</th>
+                <th style="text-align:center">Details</th>
+                <th style="text-align:center">Status</th>
+                @*<th style="text-align:center">Started Date</th>*@
+                <th style="text-align:center">Actions</th>
+                @*<th>Delete</th>*@
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var project in projects)
+            {
+                <tr>
+                    <td class="col-lg-3" style="text-align:center; width:50%">
+                        <a href = "/projects/edit/@project.ProjectName">@project.ProjectName</a>
+                    </td>
+                    <td class="col-lg-5" style="text-align:center">
+                        @project.ProjectDescription
+                    </td>
+                    <td class="col-lg-2" style="text-align:center">
+                        @project.ProjectStatus
+                    </td>
+                    @*<td class="col-lg-2" style="text-align:center">
+                        @project.ProjectStartedDate.ToShortDateString()
+                    </td>*@
+                    <td class="col-lg-2" style="text-align:center">
+                        <button class="btn btn-success" href="/projects/edit/@project.ProjectName" @onclick="@(() => UpdateProject(project.ProjectName))">Update</button>
+                        <button class="btn btn-danger" @onclick="@(() => DeleteProject(project.ProjectName))">Delete</button>
+                    </td>
+                </tr>   
+            }
+        </tbody>
+    </table>
+
+    <a class="btn btn-success mt-5" href="/projects/create/@companyId">Add Project</a>
+}
+
+
+@code {
+
+    [Parameter] public Guid companyId { get; set; }
+
+    // An object array of company objects - CompanyModel
+    ProjectEntity[] projects { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadProjects();
+    }
+
+    async Task LoadProjects()
+    {
+        projects = await http.GetFromJsonAsync<ProjectEntity[]>($"api/project/{companyId}");
+    }
+
+    async Task UpdateProject(string projectName)
+    {
+       if(await js.InvokeAsync<bool>("confirm", "Are you sure you want to edit ?"))
+        {
+            //Console.WriteLine("Works");
+            Navigation.NavigateTo($"/projects/edit/{projectName}");
+            await LoadProjects();
+        } 
+    }
+
+    async Task DeleteProject(string projectName)
+    {
+        if(await js.InvokeAsync<bool>("confirm", "Are you sure you want to delete ?"))
+        {
+            //Console.WriteLine("Works");
+            await http.DeleteAsync($"api/project/{projectName}");
+            await LoadProjects();
+        }
+    }
+}

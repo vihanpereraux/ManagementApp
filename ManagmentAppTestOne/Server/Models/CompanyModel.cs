@@ -3,6 +3,7 @@ using ManagmentAppTestOne.Shared.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ManagmentAppTestOne.Server.Models
@@ -21,6 +22,8 @@ namespace ManagmentAppTestOne.Server.Models
         public async Task<IEnumerable<CompanyEntity>> GetComapnies() 
         {
             return await _applicationDbContext.Companies.ToListAsync();
+            /*var list = _applicationDbContext.Companies.Select(v => v.CompanyName).ToList();
+            return (IEnumerable<CompanyEntity>)list;*/
         }
 
         public async Task<CompanyEntity> GetCompanyByName(string companyName)
@@ -28,18 +31,18 @@ namespace ManagmentAppTestOne.Server.Models
             return await _applicationDbContext.Companies.FirstOrDefaultAsync(x => x.CompanyName == companyName);
         }
 
-        public async Task<CompanyEntity> Post(CompanyEntity companyModel) 
+        public async Task<CompanyEntity> Post(CompanyEntity company) 
         {
-            var result = _applicationDbContext.Companies.Add(companyModel);
+            var result = _applicationDbContext.Companies.Add(company);
             await _applicationDbContext.SaveChangesAsync();
             return result.Entity;
         }
 
-        public async Task<CompanyEntity> Put(CompanyEntity companyModel) 
+        public async Task<CompanyEntity> Put(CompanyEntity company) 
         {
-            _applicationDbContext.Entry(companyModel).State = EntityState.Modified;
+            _applicationDbContext.Entry(company).State = EntityState.Modified;
             await _applicationDbContext.SaveChangesAsync();
-            return companyModel;
+            return company;
         }
 
         /*private async Task<CompanyEntity> GetCompanyByName(string companyName)

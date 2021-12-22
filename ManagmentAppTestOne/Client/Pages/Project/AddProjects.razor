@@ -1,0 +1,27 @@
+﻿@*Route*@
+@page "/projects/create/{companyId:guid}"
+
+@*Getting HttpClient class*@
+@inject HttpClient http
+
+@*For redirecting purposes*@
+@inject NavigationManager Navigation
+
+
+<h3>Add Projects</h3>
+
+<ProjectForm buttonText = "Add Project" project = "@project" OnValidSubmit = "@CreateProject"></ProjectForm>
+
+@code {
+
+    [Parameter] public Guid companyId { get; set; }
+
+    ProjectEntity project = new ProjectEntity();
+
+    async Task CreateProject()
+    {
+        project.CompanyId = companyId;
+        await http.PostAsJsonAsync("api/project", project);
+        Navigation.NavigateTo("/companies");
+    }
+}

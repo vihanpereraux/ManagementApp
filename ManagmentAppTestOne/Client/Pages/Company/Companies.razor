@@ -1,0 +1,100 @@
+﻿@*Route*@
+@page "/companies"
+
+@*Getting HttpClient class*@
+@inject HttpClient http
+
+@*For JS confirmations*@
+@inject IJSRuntime js
+
+@*For redirecting purposes*@
+@inject NavigationManager Navigation
+
+
+<h3 class="mb-5">Companies</h3>
+
+@if (companies == null)
+{
+    <text>Loading..</text>
+}
+else if (companies.Length == 0)
+{
+    <text>No Record Found</text>
+}
+else
+{
+    <table class="table table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th style="text-align:center">Company Name</th>
+                <th style="text-align:center">Company Details</th>
+                <th style="text-align:center">Employees</th>
+                @*<th style="text-align:center">Established Date</th>*@
+                <th style="text-align:center">Actions</th>
+                @*<th>Delete</th>*@
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var company in companies)
+            {
+                <tr>
+                    <td class="col-lg-3" style="text-align:center; width:50%">
+                        <a href = "/projects/@company.CompanyId">@company.CompanyName</a>
+                    </td>
+                    <td class="col-lg-5" style="text-align:center">
+                        @company.CompanyDescription
+                    </td>
+                    <td class="col-lg-2" style="text-align:center">
+                        @company.NumOfEmployees
+                    </td>
+                    @*<td class="col-lg-2" style="text-align:center">
+                        @company.EstablishedDate.ToShortDateString()
+                    </td>*@
+                    <td class="col-lg-3" style="text-align:center">
+                        <button class="btn btn-success" href="/companies/edit/@company.CompanyName" @onclick="@(() => UpdateCompany(company.CompanyName))">Update</button>
+                        <button class="btn btn-danger" @onclick="@(() => DeleteCompany(company.CompanyName))">Delete</button>
+                    </td>
+                </tr>   
+            }
+        </tbody>
+    </table>
+
+    <a class="btn btn-success mt-5" href="/companies/create">Add Copmpany</a>
+}
+
+
+@code {
+    // An object array of company objects - CompanyModel
+    CompanyEntity[] companies { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadComapnies();
+    }
+
+    async Task LoadComapnies()
+    {
+        companies = await http.GetFromJsonAsync<CompanyEntity[]>("api/company");
+
+    }
+
+    async Task UpdateCompany(string companyName)
+    {
+       if(await js.InvokeAsync<bool>("confirm", "Are you sure you want to edit ?"))
+        {
+            //Console.WriteLine("Works");
+            Navigation.NavigateTo($"/companies/edit/{companyName}");
+            await LoadComapnies();
+        } 
+    }
+
+    async Task DeleteCompany(string companyName)
+    {
+        if(await js.InvokeAsync<bool>("confirm", "Are you sure you want to delete ?"))
+        {
+            //Console.WriteLine("Works");
+            await http.DeleteAsync($"api/company/{companyName}");
+            await LoadComapnies();
+        }
+    }
+}

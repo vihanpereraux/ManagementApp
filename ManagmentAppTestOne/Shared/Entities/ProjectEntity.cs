@@ -29,5 +29,8 @@ namespace ManagmentAppTestOne.Shared.Entities
         //Foreign key for Company
         public Guid CompanyId { get; set; }
         public CompanyEntity Company { get; set; }
+
+        //Referencing the parent table for Collaboration Entity
+        public ICollection<CollaborationEntity> Collaborations { get; set; }
     }
 }

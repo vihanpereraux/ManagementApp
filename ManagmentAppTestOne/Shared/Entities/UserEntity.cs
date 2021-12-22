@@ -30,5 +30,8 @@ namespace ManagmentAppTestOne.Shared.Entities
 
         //Referencing the parent table for Collaboration Entity
         public ICollection<CollaborationEntity> Collaborations { get; set; }
+
+        //Referencing the parent table for Ticket Entity
+        public ICollection<TicketEntity> Tickets { get; set; }
     }
 }

@@ -15,6 +15,7 @@
 @code {
 
     [Parameter] public string projectName { get; set; }
+    //[Parameter] public Guid companyId { get; set; }
 
     ProjectEntity project = new ProjectEntity();
 
@@ -26,6 +27,6 @@
     async Task UpdateProjectByName()
     {
         await http.PutAsJsonAsync("api/project", project);
-        Navigation.NavigateTo("/companies");
+        Navigation.NavigateTo($"/companies");
     }
 }

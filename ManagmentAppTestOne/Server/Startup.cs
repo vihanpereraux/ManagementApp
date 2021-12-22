@@ -33,6 +33,7 @@ namespace ManagmentAppTestOne.Server
             services.AddScoped<IProjectModel, ProjectModel>();
             services.AddScoped<IUserModel, UserModel>();
             services.AddScoped<ICollaborationModel, CollaborationModel>();
+            services.AddScoped<ITicketModel, TicketModel>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();

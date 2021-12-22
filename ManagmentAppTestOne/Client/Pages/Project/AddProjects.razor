@@ -22,6 +22,6 @@
     {
         project.CompanyId = companyId;
         await http.PostAsJsonAsync("api/project", project);
-        Navigation.NavigateTo("/companies");
+        Navigation.NavigateTo($"/projects/{companyId}");
     }
 }

@@ -1,0 +1,50 @@
+﻿@*Route*@
+@page "/users/userform"
+
+@*Http Client class*@
+@inject HttpClient http
+
+
+<EditForm Model="@user" OnValidSubmit="@OnValidSubmit">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+
+    <div class="form-group">
+        <label class="control-label">Name</label>
+        <InputText @bind-Value="user.UserName"></InputText>
+        <ValidationMessage For="@(() => user.UserName)" />
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Occupation</label>
+        <InputText @bind-Value="user.UserOccupation"></InputText>
+        <ValidationMessage For="@(() => user.UserOccupation)" />
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Capability</label>
+        <InputText @bind-Value="user.UserCapacity"></InputText>
+        <ValidationMessage For="@(() => user.UserCapacity)" />
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Email</label>
+        <InputText @bind-Value="user.UserEmail"></InputText>
+        <ValidationMessage For="@(() => user.UserEmail)" />
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Password</label>
+        <InputText @bind-Value="user.UserPassword"></InputText>
+        <ValidationMessage For="@(() => user.UserPassword)" />
+    </div>
+
+    <button type="submit" class="btn btn-success">@buttonText</button>
+</EditForm>
+
+@code {
+
+    [Parameter] public UserEntity user { get; set; }
+    [Parameter] public string buttonText { get; set; } = "Save Ticket";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+
+}

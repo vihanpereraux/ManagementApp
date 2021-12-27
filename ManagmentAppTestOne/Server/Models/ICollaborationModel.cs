@@ -9,7 +9,9 @@ namespace ManagmentAppTestOne.Server.Models
     {
         public Task<IEnumerable<CollaborationEntity>> GetCollaborations();
 
-        public Task<CollaborationEntity> GetCollaborationById(Guid collaborationId);
+        public Task<CollaborationEntity> GetSingleCollaboration(Guid collaborationId);
+
+        public Task<IEnumerable<UserEntity>> GetCollaborationById(Guid projectId);
 
         public Task<CollaborationEntity> Post(CollaborationEntity collaboration);
 

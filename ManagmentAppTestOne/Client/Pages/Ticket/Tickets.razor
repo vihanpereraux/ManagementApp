@@ -10,9 +10,11 @@
 @*For redirecting purposes*@
 @inject NavigationManager Navigation
 
+@using System.Linq;
+
 <h3 class="mb-5">Tickets</h3>
 
-@if (tickets == null)
+@if (tickets == null && users == null)
 {
     <text>Loading..</text>
 }
@@ -46,17 +48,17 @@ else
                     <td class="col-lg-1" style="text-align:center">
                         @ticket.TicketState
                     </td>
-                    <td class="col-lg-2" style="text-align:center">
-                        @foreach(var user in users)
+                    <td class="col-lg-2" style="text-align:center">                         
+                        @foreach( var user in users )
                         {
-                            @if(@ticket.UserId == @user.UserId)
+                            @if( @ticket.UserId == @user.UserId )
                             {
-                                @user.UserName
-                            }
+                                <p>@user.UserName</p>
+                            }   
                         }
                     </td>
                     <td class="col-lg-5" style="text-align:center">
-                        <button class="btn btn-success" href="" @onclick="@(() => UpdateTicket(ticket.TicketTitle))">Update</button>
+                        <button class="btn btn-success" href="/tickets/edit/@ticket.TicketTitle/@projectId" @onclick="@(() => UpdateTicket(ticket.TicketTitle))">Update</button>
                         <button class="btn btn-danger" @onclick="@(() => DeleteTicket(ticket.TicketTitle))">Delete</button>
                     </td>
                 </tr>   
@@ -64,8 +66,53 @@ else
         </tbody>
     </table>
 
-    <a class="btn btn-success mt-5" href="/tickets/create/@projectId">Add Task</a>
+    <a class="btn btn-success mt-3" href="/tickets/create/@projectId">Add Task</a>
 }
+
+
+<h3 class="mt-5">Assigned Users</h3>
+
+@if (users == null)
+{
+    <text>Loading..</text>
+}
+else if (users.Length == 0)
+{
+    <text>No Record Found</text>
+}
+else
+{   
+    <table class="table">
+        <thead class="table-dark">
+            <tr>
+                <th style="text-align:center">Name</th>
+                <th style="text-align:center">Occupation</th>
+                <th style="text-align:center">Capacity</th>
+                <th style="text-align:center"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var user in users)
+            {
+                <tr>
+                    <td class="col-lg-4" style="text-align:center">
+                        @user.UserName 
+                    </td>
+                    <td class="col-lg-4" style="text-align:center">
+                        @user.UserOccupation
+                    </td>
+                    <td class="col-lg-4" style="text-align:center">
+                        @user.UserCapacity
+                    </td>
+                    <td class="col-lg-5" style="text-align:center">
+                        <button class="btn btn-danger" @onclick="@(() => DeleteCollaboration(@user.UserId))">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<a class="btn btn-success mt-3" href="/collaboration/create/@projectId">Assign Users</a>
 
 @code {
 
@@ -73,7 +120,12 @@ else
 
     // An object array of ticket objects - TicketEntity
     TicketEntity[] tickets { get; set; }
+
     UserEntity[] users { get; set; }
+
+    CollaborationEntity[] collaborations { get; set; }
+
+    ProjectEntity[] projects { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -83,17 +135,44 @@ else
     async Task LoadTickets()
     {
         tickets = await http.GetFromJsonAsync<TicketEntity[]>($"api/ticket/{projectId}");
-        users = await http.GetFromJsonAsync<UserEntity[]>("api/user");
+
+        collaborations = await http.GetFromJsonAsync<CollaborationEntity[]>($"api/collaboration");
+
+        users = await http.GetFromJsonAsync<UserEntity[]>($"api/collaboration/{projectId}");
+
+        projects = await http.GetFromJsonAsync<ProjectEntity[]>("api/project");
     }
 
     async Task UpdateTicket(string ticketName)
     {
-        
+        if(await js.InvokeAsync<bool>("confirm", "Are you sure you want to edit ?"))
+        {
+            //Console.WriteLine("Works");
+            Navigation.NavigateTo($"/tickets/edit/{ticketName}/{projectId}");
+            await LoadTickets();
+        }
     }
 
     async Task DeleteTicket(string ticketName)
     {
-        
+        if(await js.InvokeAsync<bool>("confirm", "Are you sure you want to delete ?"))
+        {
+            //Console.WriteLine("Works");
+            await http.DeleteAsync($"api/ticket/{ticketName}");
+            await LoadTickets();
+        }
+    }
+
+    async Task DeleteCollaboration(Guid userId)
+    {
+        foreach (var collaboration in collaborations)
+            {   
+                if(collaboration.UserId == userId && collaboration.ProjectId == projectId)
+                {
+                    await http.DeleteAsync($"api/collaboration/{collaboration.CollaborationId}");
+                }
+            }
+            await LoadTickets();
     }
 
 }

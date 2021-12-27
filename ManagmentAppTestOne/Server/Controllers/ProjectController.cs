@@ -23,6 +23,12 @@ namespace ManagmentAppTestOne.Server.Controllers
             _projectModel = projectModel;
         }
 
+        [HttpGet]
+        public async Task<ActionResult> GetAllProjects()
+        {
+            return Ok(await _projectModel.GetAllProjects());
+        }
+
         [HttpGet("{companyId:guid}")]
         public async Task<ActionResult> GetProjects(Guid companyId)
         {

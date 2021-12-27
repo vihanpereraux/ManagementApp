@@ -8,6 +8,8 @@ namespace ManagmentAppTestOne.Server.Models
 {
     public interface IProjectModel
     {
+        public Task<IEnumerable<ProjectEntity>> GetAllProjects();
+
         public Task<IEnumerable<ProjectEntity>> GetProjects(Guid companyId);
 
         public Task<ProjectEntity> GetProjectByName(string  projectName);

@@ -1,0 +1,61 @@
+﻿@*Route*@
+@page "/collaboration/create/{projectId:guid}"
+
+@*Getting HttpClient class*@
+@inject HttpClient http
+
+@*For redirecting purposes*@
+@inject NavigationManager Navigation
+
+
+@if (users == null)
+{
+    <text>Loading..</text>
+}
+else if (users.Length == 0)
+{
+    <text>No Record Found</text>
+}
+else
+{
+    <h3 class="mb-5">Add Collaboration</h3>
+
+    <EditForm Model="@collaboration" OnValidSubmit="@CreateCollaboration">
+        <DataAnnotationsValidator></DataAnnotationsValidator>
+
+        <div class="form-group">
+             <label class="control-label">Assign a User</label>
+             <div class = "col-sm-12">
+                <InputSelect @bind-Value="collaboration.UserId">
+                    @foreach(var user in users)
+                    {
+                        <option value="@user.UserId">@user.UserName</option>    
+                    }
+               </InputSelect>
+             </div>
+         </div>
+
+        <button type="submit" class="btn btn-success">Save Ticket</button>
+    </EditForm>
+}
+
+
+@code {
+
+    CollaborationEntity collaboration = new CollaborationEntity();
+
+    UserEntity[] users { get; set; }
+
+    [Parameter] public Guid projectId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        users = await http.GetFromJsonAsync<UserEntity[]>("api/user");
+    }
+
+    async Task CreateCollaboration()
+    {
+        collaboration.ProjectId = projectId;
+        await http.PostAsJsonAsync("api/collaboration", collaboration);
+    }
+}

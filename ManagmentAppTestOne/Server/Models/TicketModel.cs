@@ -20,6 +20,11 @@ namespace ManagmentAppTestOne.Server.Models
             _applicationDbContext = applicationDbContext;
         }
 
+        public async Task<IEnumerable<TicketEntity>> GetTickets() 
+        {
+            return await _applicationDbContext.Tickets.ToListAsync();
+        }
+
         public async Task<IEnumerable<TicketEntity>> GetTickets(Guid projectId)
         {
             return await _applicationDbContext.Tickets.Where(x => x.ProjectId == projectId).ToListAsync();

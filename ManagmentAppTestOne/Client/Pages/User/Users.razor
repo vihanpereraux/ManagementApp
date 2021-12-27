@@ -1,0 +1,96 @@
+﻿@*Route*@
+@page "/users"
+
+@*Getting HttpClient class*@
+@inject HttpClient http
+
+@*For JS confirmations*@
+@inject IJSRuntime js
+
+@*For redirecting purposes*@
+@inject NavigationManager Navigation
+
+
+<h3 class="mb-5">Users</h3>
+
+@if (users == null)
+{
+    <text>Loading..</text>
+}
+else if (users.Length == 0)
+{
+    <text>No Record Found</text>
+}
+else
+{
+    <table class="table table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th style="text-align:center">Name</th>
+                <th style="text-align:center">Occupation</th>
+                <th style="text-align:center">Capability</th>
+                <th style="text-align:center">Email</th>
+                <th style="text-align:center"></th>
+                @*<th>Delete</th>*@
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var user in users)
+            {
+                <tr>
+                    <td class="col-lg-2" style="text-align:center; width:50%">
+                        @user.UserName
+                    </td>
+                    <td class="col-lg-2 pr-3" style="text-align:center">
+                        @user.UserOccupation
+                    </td>
+                    <td class="col-lg-3" style="text-align:center">
+                        @user.UserCapacity
+                    </td>
+                    <td class="col-lg-2" style="text-align:center">                         
+                        @user.UserEmail
+                    </td>
+                    <td class="col-lg-3" style="text-align:center">
+                        <button class="btn btn-success" @onclick="@(() => UpdateUser(user.UserId))">Update</button>
+                        <button class="btn btn-danger" @onclick="@(() => DeleteUser(user.UserId))">Delete</button>
+                    </td>
+                </tr>   
+            }
+        </tbody>
+    </table>
+
+    <a class="btn btn-success mt-3" href="/users/create">Add User</a>
+}
+
+@code {
+
+    UserEntity[] users { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadUsers();
+    }
+
+    async Task LoadUsers()
+    {
+        users = await http.GetFromJsonAsync<UserEntity[]>("api/user");
+    }
+
+    async Task UpdateUser(Guid userId)
+    {
+        if(await js.InvokeAsync<bool>("confirm", "Are you sure you want to edit ?"))
+        {
+            Navigation.NavigateTo("");
+            await LoadUsers();
+        }
+    }
+
+    async Task DeleteUser(Guid userId)
+    {
+        if(await js.InvokeAsync<bool>("confirm", "Are you sure you want to edit ?"))
+        {
+            await http.DeleteAsync($"api/user/{userId}");
+            await LoadUsers();
+        }
+    }
+}

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;  
 
 namespace ManagmentAppTestOne.Server.Models
 {
@@ -24,9 +25,29 @@ namespace ManagmentAppTestOne.Server.Models
             return await _applicationDbContext.Collaborations.ToListAsync();
         }
 
-        public async Task<CollaborationEntity> GetCollaborationById(Guid collaborationId)
+        /*Newly created*/
+        public async Task<CollaborationEntity> GetSingleCollaboration(Guid collaborationId)
         {
             return await _applicationDbContext.Collaborations.FirstOrDefaultAsync(x => x.CollaborationId == collaborationId);
+        }
+
+        public async Task<IEnumerable<UserEntity>> GetCollaborationById(Guid projectId)
+        {
+            /*return await _applicationDbContext.Collaborations.FirstOrDefaultAsync(x => x.ProjectId == projectId);*/
+            var users = await (from user in _applicationDbContext.Users
+                          join collaboration in _applicationDbContext.Collaborations
+                          on user.UserId equals collaboration.UserId
+                          where collaboration.ProjectId == projectId
+                          select new UserEntity 
+                          {
+                            UserId = user.UserId,
+                            UserName = user.UserName,
+                            UserOccupation = user.UserOccupation,
+                            UserCapacity = user.UserCapacity,
+                            UserEmail = user.UserEmail,
+                            UserPassword = user.UserPassword,
+                          }).ToListAsync();
+            return users;
         }
 
         public async Task<CollaborationEntity> Post(CollaborationEntity collaboration)
@@ -45,7 +66,7 @@ namespace ManagmentAppTestOne.Server.Models
 
         public async Task<CollaborationEntity> Delete(Guid collaborationId)
         {
-            var result = await GetCollaborationById(collaborationId);
+            var result = await GetSingleCollaboration(collaborationId);
             if (result != null)
             {
                 _applicationDbContext.Collaborations.Remove(result);

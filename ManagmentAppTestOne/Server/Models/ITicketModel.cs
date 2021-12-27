@@ -7,6 +7,8 @@ namespace ManagmentAppTestOne.Server.Models
 {
     public interface ITicketModel
     {
+        public Task<IEnumerable<TicketEntity>> GetTickets();
+
         public Task<IEnumerable<TicketEntity>> GetTickets(Guid projectId);
 
         public Task<TicketEntity> GetTicketByName(string ticketName);

@@ -2,6 +2,7 @@
 using ManagmentAppTestOne.Shared.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Threading.Tasks;
 
 namespace ManagmentAppTestOne.Server.Controllers
@@ -25,10 +26,10 @@ namespace ManagmentAppTestOne.Server.Controllers
             return Ok(await _userModel.GetUsers());
         }
 
-        [HttpGet("{userName}", Name = "GetUser")]
-        public async Task<ActionResult<UserEntity>> Get(string userName)
+        [HttpGet("{userId:guid}")]
+        public async Task<ActionResult<UserEntity>> Get(Guid userId)
         {
-            return Ok(await _userModel.GetUserByName(userName));
+            return Ok(await _userModel.GetUserById(userId));
         }
 
         [HttpPost]
@@ -46,9 +47,9 @@ namespace ManagmentAppTestOne.Server.Controllers
         }
 
         [HttpDelete("{userName}")]
-        public async Task<ActionResult> Delete(string userName)
+        public async Task<ActionResult> Delete(Guid userId)
         {
-            var deleted = await _userModel.Delete(userName);
+            var deleted = await _userModel.Delete(userId);
             return new CreatedAtRouteResult("GetUser", new { userName = deleted.UserName }, deleted);
         }
 

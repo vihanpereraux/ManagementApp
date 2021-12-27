@@ -1,0 +1,78 @@
+﻿@page "/collaboration/collaborationform"
+
+@*Getting HttpClient class*@
+@inject HttpClient http
+
+
+@if (users == null)
+{
+    <text>Loading..</text>
+}
+else if (users.Length == 0)
+{
+    <text>No Record Found</text>
+}
+else
+{
+    <EditForm Model="@ticket" OnValidSubmit="@OnValidSubmit">
+        <DataAnnotationsValidator></DataAnnotationsValidator>
+
+        <div class="form-group">
+            <label class="control-label">Ticket Name</label>
+            <InputText @bind-Value="ticket.TicketTitle"></InputText >
+            <ValidationMessage For="@(() => ticket.TicketTitle)" />
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">Ticket Details</label>
+            <InputText @bind-Value="ticket.TicketDescription"></InputText>
+            <ValidationMessage For="@(() => ticket.TicketDescription)" />
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">Ticket Status</label>
+            <InputText  @bind-Value="ticket.TicketState"></InputText>
+            <ValidationMessage For="@(() => ticket.TicketState)" />
+        </div>
+
+        <div class="form-group">
+             <label class="control-label">Allocated User</label>
+             <div class = "col-sm-12">
+                <InputSelect @bind-Value="ticket.UserId">
+                    @foreach(var user in users)
+                    {
+                        <option value="@user.UserId">@user.UserName</option>    
+                    }
+               </InputSelect>
+             </div>
+         </div>
+
+        <button type="submit" class="btn btn-success">@buttonText</button>
+    </EditForm>
+}
+
+@code {
+
+    [Parameter] public TicketEntity ticket { get; set; }
+    [Parameter] public string buttonText { get; set; } = "Save Ticket";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+    [Parameter] public Guid projectId { get; set; }
+
+    UserEntity[] users { get; set; }
+
+    //[Parameter] public Guid projectId { get; set; }
+
+    CollaborationEntity[] collaborations { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadUsers();
+    }
+
+    async Task LoadUsers()
+    {
+        users = await http.GetFromJsonAsync<UserEntity[]>($"api/collaboration/{projectId}");
+        //collaborations = await http.GetFromJsonAsync<CollaborationEntity[]>("api/collaboration/{}");
+    }
+
+}

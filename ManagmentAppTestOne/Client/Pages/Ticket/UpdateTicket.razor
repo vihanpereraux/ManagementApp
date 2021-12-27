@@ -1,5 +1,38 @@
-﻿<h3>UpdateTicket</h3>
+﻿@*Route*@
+@page "/tickets/edit/{ticketName}/{projectId:guid}"
+
+@*Getting HttpClient class*@
+@inject HttpClient http
+
+@*For redirecting purposes*@
+@inject NavigationManager Navigation
+
+<h3 class="mb-5">Update Ticket</h3>
+
+@*<TicketForm buttonText = "Add Ticket" ticket = "@ticket" OnValidSubmit = "@UpdateTicketById"></TicketForm>*@
+<CollaborationForm buttonText = "Add Ticket" projectId = "@projectId" ticket = "@ticket" OnValidSubmit = "@UpdateTickets"></CollaborationForm>
+
 
 @code {
+
+    [Parameter] public string ticketName { get; set; }
+
+    [Parameter] public Guid projectId { get; set; }
+
+    TicketEntity ticket = new TicketEntity();
+
+    UserEntity[] users { get; set; }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        ticket = await http.GetFromJsonAsync<TicketEntity>($"api/ticket/{ticketName}");
+        users = await http.GetFromJsonAsync<UserEntity[]>($"api/collaboration/{projectId}");
+    }
+
+    async Task UpdateTickets()
+    {
+        await http.PutAsJsonAsync("api/ticket", ticket);
+        Navigation.NavigateTo($"/companies");
+    }
 
 }

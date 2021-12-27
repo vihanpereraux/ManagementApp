@@ -7,55 +7,124 @@
 @*For redirecting purposes*@
 @inject NavigationManager Navigation
 
-<h3>Add Ticket</h3>
+<h3 class="mb-5">Add Ticket</h3>
 
-@*<TicketForm buttonText = "Add Ticket" ticket = "@ticket" OnValidSubmit = "@CreateTicket"></TicketForm>*@
+@*@if (users == null)
+{
+    <text>Loading..</text>
+}
+else if (users.Length == 0)
+{
+    <text>No Record Found</text>
+}
+else
+{
+    <CollaborationForm buttonText = "Add Ticket" projectId = "@projectId" ticket = "@ticket" OnValidSubmit = "@CreateTicket"></CollaborationForm>
 
-<EditForm Model="@ticket" OnValidSubmit="@CreateTicket">
-    <DataAnnotationsValidator></DataAnnotationsValidator>
+    <EditForm Model="@ticket" OnValidSubmit="@CreateTicket">
+        <DataAnnotationsValidator></DataAnnotationsValidator>
 
-    <div class="form-group">
-        <label class="control-label">Ticket Name</label>
-        <InputText @bind-Value="ticket.TicketTitle"></InputText>
-        <ValidationMessage For="@(() => ticket.TicketTitle)" />
-    </div>
-
-    <div class="form-group">
-        <label class="control-label">Ticket Details</label>
-        <InputText @bind-Value="ticket.TicketDescription"></InputText>
-        <ValidationMessage For="@(() => ticket.TicketDescription)" />
-    </div>
-
-    <div class="form-group">
-        <label class="control-label">Ticket Status</label>
-        <InputText  @bind-Value="ticket.TicketState"></InputText>
-        <ValidationMessage For="@(() => ticket.TicketState)" />
-    </div>
-
-    @*<div class="form-group">
-        <label class="control-label">Allocated User</label>
-        <div class = "col-sm-12">
-            <InputSelect @bind-Value="xxx">
-                @foreach (var user in users)
-                {
-                    <option value="@user.UserId">@user.UserName</option>
-                }
-            </InputSelect>
-            <InputSelect id="user" @bind-Value="userId" class="form-control">
-                @foreach(var user in users)
-                {
-                    <option value="@user.UserId">@user.UserName</option>
-                }
-            </InputSelect>
+        <div class="form-group">
+            <label class="control-label">Ticket Name</label>
+            <InputText @bind-Value="ticket.TicketTitle"></InputText>
+            <ValidationMessage For="@(() => ticket.TicketTitle)" />
         </div>
-    </div>*@
 
-    
+        <div class="form-group">
+            <label class="control-label">Ticket Details</label>
+            <InputText @bind-Value="ticket.TicketDescription"></InputText>
+            <ValidationMessage For="@(() => ticket.TicketDescription)" />
+        </div>
 
-    <button type="submit" class="btn btn-success">Add</button>
+        <div class="form-group">
+            <label class="control-label">Ticket Status</label>
+            <InputText  @bind-Value="ticket.TicketState"></InputText>
+            <ValidationMessage For="@(() => ticket.TicketState)" />
+        </div>
 
-</EditForm>
+        <div class="form-group">
+             <label class="control-label">Allocated User</label>
+             <div class = "col-sm-12">
+                <InputSelect @bind-Value="ticket.UserId">
+                    @foreach(var user in users)
+                    {
+                        <option value="@user.UserId">@user.UserName</option>    
+                    }
+               </InputSelect>
+             </div>
+         </div>
 
+        <button type="submit" class="btn btn-success">Save Ticket</button>
+    </EditForm>
+
+    <h3 class="mb-3 mt-4">Available Employees</h3>
+    <table class="table table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th style="text-align:center">Name</th>
+                <th style="text-align:center">Occupation</th>
+                <th style="text-align:center">Capacity</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var user in allUsers)
+            {
+                <tr>
+                    <td class="col-lg-4" style="text-align:center; width:50%">
+                        @user.UserName
+                    </td>
+                    <td class="col-lg-4 pr-3" style="text-align:center">
+                        @user.UserOccupation
+                    </td>
+                    <td class="col-lg-4" style="text-align:center">
+                        @user.UserCapacity
+                    </td>
+                </tr>   
+            }
+        </tbody>
+    </table>
+}*@
+
+<CollaborationForm buttonText = "Add Ticket" projectId = "@projectId" ticket = "@ticket" OnValidSubmit = "@CreateTicket"></CollaborationForm>
+
+@if (allUsers == null)
+{
+    <text>Loading..</text>
+}
+else if (allUsers.Length == 0)
+{
+    <text>No Record Found</text>
+}
+else
+{
+    <h3 class="mb-3 mt-4">Available Employees</h3>
+
+    <table class="table table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th style="text-align:center">Name</th>
+                <th style="text-align:center">Occupation</th>
+                <th style="text-align:center">Capacity</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var user in allUsers)
+            {
+                <tr>
+                    <td class="col-lg-4" style="text-align:center; width:50%">
+                        @user.UserName
+                    </td>
+                    <td class="col-lg-4 pr-3" style="text-align:center">
+                        @user.UserOccupation
+                    </td>
+                    <td class="col-lg-4" style="text-align:center">
+                        @user.UserCapacity
+                    </td>
+                </tr>   
+            }
+        </tbody>
+    </table>
+}
 @code {
 
     [Parameter] public Guid projectId { get; set; }
@@ -63,26 +132,20 @@
     TicketEntity ticket = new TicketEntity();
 
     UserEntity[] users { get; set; }
-    public string xxx { get; set; }
 
-    public string userId { get; set; }
+    UserEntity[] allUsers { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        users = await http.GetFromJsonAsync<UserEntity[]>("api/user");
-        xxx = ticket.UserId.ToString();
-        foreach(var user in users)
-        {
-            Console.WriteLine(user.UserName);
-        }
-        
+        users = await http.GetFromJsonAsync<UserEntity[]>($"api/collaboration/{projectId}");
+        allUsers = await http.GetFromJsonAsync<UserEntity[]>("api/user");
     }
 
     async Task CreateTicket()
     {
         ticket.ProjectId = projectId;
         await http.PostAsJsonAsync("api/ticket", ticket);
-        Navigation.NavigateTo("/tickets");
+        Navigation.NavigateTo($"/tickets/{projectId}");
     }
 
 }

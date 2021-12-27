@@ -20,10 +20,22 @@ namespace ManagmentAppTestOne.Server.Controllers
             _ticketModel = ticketModel;
         }
 
-        [HttpGet("{projectId}", Name = "GetTickets")]
+        [HttpGet]
+        public async Task<ActionResult> GetTickets()
+        {
+            return Ok(await _ticketModel.GetTickets());
+        }
+
+        [HttpGet("{projectId:guid}")]
         public async Task<ActionResult> GetTickets(Guid projectId)
         {
             return Ok(await _ticketModel.GetTickets(projectId));
+        }
+
+        [HttpGet("{ticketName}")]
+        public async Task<ActionResult<TicketEntity>> GetTicketByName(string ticketName) 
+        {
+            return Ok(await _ticketModel.GetTicketByName(ticketName));
         }
 
         [HttpPost]

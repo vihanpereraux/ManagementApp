@@ -21,15 +21,21 @@ namespace ManagmentAppTestOne.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetCompanies()
+        public async Task<ActionResult> GetCollaborations()
         {
             return Ok(await _collaborationModel.GetCollaborations());
         }
 
-        [HttpGet("{collaborationId}", Name = "GetCollaboration")]
-        public async Task<ActionResult<CollaborationEntity>> Get(Guid collaborationId)
+        /*[HttpGet("{companyName}", Name = "GetCompany")]
+        public async Task<ActionResult<CompanyEntity>> Get(string companyName)
         {
-            return Ok(await _collaborationModel.GetCollaborationById(collaborationId));
+            return Ok(await _companyModel.GetCompanyByName(companyName));
+        }*/
+
+        [HttpGet("{projectId:guid}")]
+        public async Task<ActionResult> Get(Guid projectId)
+        {
+            return Ok(await _collaborationModel.GetCollaborationById(projectId));
         }
 
         [HttpPost]

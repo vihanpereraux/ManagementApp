@@ -52,9 +52,27 @@ namespace ManagmentAppTestOne.Server.Models
 
         public async Task<CollaborationEntity> Post(CollaborationEntity collaboration)
         {
-            var result = _applicationDbContext.Collaborations.Add(collaboration);
-            await _applicationDbContext.SaveChangesAsync();
-            return result.Entity;
+            var chedCollab = await GetCollaborations();
+            string userSystem = "not existing";
+
+            foreach(var collab in chedCollab) 
+            {
+                if(collaboration.UserId == collab.UserId && collaboration.ProjectId == collab.ProjectId) 
+                {
+                    userSystem = "existing";
+                }
+            }
+
+            if (userSystem != "existing")
+            {
+                var result = _applicationDbContext.Collaborations.Add(collaboration);
+                await _applicationDbContext.SaveChangesAsync();
+                return result.Entity;
+            }
+            else 
+            {
+                return null; 
+            }
         }
 
         public async Task<CollaborationEntity> Put(CollaborationEntity collaboration)

@@ -1,5 +1,30 @@
-﻿<h3>UpdateUser</h3>
+﻿@*Route*@
+@page "/users/edit/{userName}"
+
+@*Getting HttpClient class*@
+@inject HttpClient http
+
+@*For redirecting purposes*@
+@inject NavigationManager Navigation
+
+<h3 class="mb-5">Update User</h3>
+
+<UserForm buttonText="Update User" user="@user" OnValidSubmit="@UpdateUsers"></UserForm>
 
 @code {
 
+    [Parameter] public string userName { get; set; }
+
+    UserEntity user = new UserEntity();
+
+    protected async override Task OnParametersSetAsync()
+    {
+        user = await http.GetFromJsonAsync<UserEntity>($"api/user/{userName}");
+    }
+
+    async Task UpdateUsers()
+    {
+        await http.PutAsJsonAsync("api/user", user);
+        Navigation.NavigateTo("users");
+    }
 }

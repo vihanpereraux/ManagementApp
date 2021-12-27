@@ -24,16 +24,25 @@ namespace ManagmentAppTestOne.Server.Models
             return await _applicationDbContext.Users.ToListAsync();
         }
 
-        public async Task<UserEntity> GetUserById(Guid userId)
+        public async Task<UserEntity> GetUserById(string userName)
         {
-            return await _applicationDbContext.Users.FirstOrDefaultAsync(x => x.UserId == userId);
+            return await _applicationDbContext.Users.FirstOrDefaultAsync(x => x.UserName == userName);
         }
 
         public async Task<UserEntity> Post(UserEntity userModel)
         {
-            var result = _applicationDbContext.Users.Add(userModel);
-            await _applicationDbContext.SaveChangesAsync();
-            return result.Entity;
+            var cheduser = await GetUserById(userModel.UserName);
+            if(cheduser == null) 
+            {
+                var result = _applicationDbContext.Users.Add(userModel);
+                await _applicationDbContext.SaveChangesAsync();
+                return result.Entity;
+            }
+            else 
+            {
+                return null;
+            }
+            
         }
 
         public async Task<UserEntity> Put(UserEntity userModel)
@@ -48,9 +57,9 @@ namespace ManagmentAppTestOne.Server.Models
             return await _applicationDbContext.Companies.FirstOrDefaultAsync(company => company.CompanyName == companyName);
         }*/
 
-        public async Task<UserEntity> Delete(Guid userId)
+        public async Task<UserEntity> Delete(string userName)
         {
-            var result = await GetUserById(userId);
+            var result = await GetUserById(userName);
             if (result != null)
             {
                 _applicationDbContext.Users.Remove(result);

@@ -37,9 +37,18 @@ namespace ManagmentAppTestOne.Server.Models
 
         public async Task<TicketEntity> Post(TicketEntity ticket)
         {
-            var result = _applicationDbContext.Tickets.Add(ticket);
-            await _applicationDbContext.SaveChangesAsync();
-            return result.Entity;
+            var chedTicket = await GetTicketByName(ticket.TicketTitle);
+            if(chedTicket == null) 
+            {
+                var result = _applicationDbContext.Tickets.Add(ticket);
+                await _applicationDbContext.SaveChangesAsync();
+                return result.Entity;
+            }
+            else 
+            {
+                return null;
+            }
+            
         }
 
         public async Task<TicketEntity> Put(TicketEntity ticket)

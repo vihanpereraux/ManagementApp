@@ -51,8 +51,8 @@ else
                         @user.UserEmail
                     </td>
                     <td class="col-lg-3" style="text-align:center">
-                        <button class="btn btn-success" @onclick="@(() => UpdateUser(user.UserId))">Update</button>
-                        <button class="btn btn-danger" @onclick="@(() => DeleteUser(user.UserId))">Delete</button>
+                        <button class="btn btn-success" @onclick="@(() => UpdateUser(user.UserName))">Update</button>
+                        <button class="btn btn-danger" @onclick="@(() => DeleteUser(user.UserName))">Delete</button>
                     </td>
                 </tr>   
             }
@@ -76,20 +76,20 @@ else
         users = await http.GetFromJsonAsync<UserEntity[]>("api/user");
     }
 
-    async Task UpdateUser(Guid userId)
+    async Task UpdateUser(string userName)
     {
         if(await js.InvokeAsync<bool>("confirm", "Are you sure you want to edit ?"))
         {
-            Navigation.NavigateTo("");
+            Navigation.NavigateTo($"users/edit/{userName}");
             await LoadUsers();
         }
     }
 
-    async Task DeleteUser(Guid userId)
+    async Task DeleteUser(string userName)
     {
         if(await js.InvokeAsync<bool>("confirm", "Are you sure you want to edit ?"))
         {
-            await http.DeleteAsync($"api/user/{userId}");
+            await http.DeleteAsync($"api/user/{userName}");
             await LoadUsers();
         }
     }

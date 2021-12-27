@@ -35,7 +35,7 @@ else
              </div>
          </div>
 
-        <button type="submit" class="btn btn-success">Save Ticket</button>
+        <button type="submit" class="btn btn-success">Assign User</button>
     </EditForm>
 }
 
@@ -57,5 +57,6 @@ else
     {
         collaboration.ProjectId = projectId;
         await http.PostAsJsonAsync("api/collaboration", collaboration);
+        Navigation.NavigateTo($"tickets/{projectId}");
     }
 }

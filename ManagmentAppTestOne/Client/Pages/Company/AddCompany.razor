@@ -16,8 +16,12 @@
 
     CompanyEntity company = new CompanyEntity();
 
+    CompanyEntity valCompany = new CompanyEntity();
+
     async Task CreateCompany()
     {
+        //valCompany = await http.GetFromJsonAsync<CompanyEntity>($"api/company/{company.CompanyName}");
+
         await http.PostAsJsonAsync("api/company", company);
         Navigation.NavigateTo("/companies");
     }

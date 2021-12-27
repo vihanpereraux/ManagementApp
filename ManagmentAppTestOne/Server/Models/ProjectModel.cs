@@ -39,9 +39,18 @@ namespace ManagmentAppTestOne.Server.Models
 
         public async Task<ProjectEntity> Post(ProjectEntity project)
         {
-            var result = _applicationDbContext.Projects.Add(project);
-            await _applicationDbContext.SaveChangesAsync();
-            return result.Entity;
+            var chedProject = await GetProjectByName(project.ProjectName);
+            if(chedProject == null) 
+            {
+                var result = _applicationDbContext.Projects.Add(project);
+                await _applicationDbContext.SaveChangesAsync();
+                return result.Entity;
+            }
+            else 
+            {
+                return null;
+            }
+            
         }
 
         public async Task<ProjectEntity> Put(ProjectEntity project)

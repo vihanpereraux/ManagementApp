@@ -33,9 +33,18 @@ namespace ManagmentAppTestOne.Server.Models
 
         public async Task<CompanyEntity> Post(CompanyEntity company) 
         {
-            var result = _applicationDbContext.Companies.Add(company);
-            await _applicationDbContext.SaveChangesAsync();
-            return result.Entity;
+            var chedCompany = await GetCompanyByName(company.CompanyName);
+            if (chedCompany == null) 
+            {
+                var result = _applicationDbContext.Companies.Add(company);
+                await _applicationDbContext.SaveChangesAsync();
+                return result.Entity;
+            }
+            else 
+            {
+                return null;
+            }
+            
         }
 
         public async Task<CompanyEntity> Put(CompanyEntity company) 

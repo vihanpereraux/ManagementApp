@@ -26,10 +26,10 @@ namespace ManagmentAppTestOne.Server.Controllers
             return Ok(await _userModel.GetUsers());
         }
 
-        [HttpGet("{userId:guid}")]
-        public async Task<ActionResult<UserEntity>> Get(Guid userId)
+        [HttpGet("{userName}")]
+        public async Task<ActionResult<UserEntity>> Get(string userName)
         {
-            return Ok(await _userModel.GetUserById(userId));
+            return Ok(await _userModel.GetUserById(userName));
         }
 
         [HttpPost]
@@ -47,9 +47,9 @@ namespace ManagmentAppTestOne.Server.Controllers
         }
 
         [HttpDelete("{userName}")]
-        public async Task<ActionResult> Delete(Guid userId)
+        public async Task<ActionResult> Delete(string userName)
         {
-            var deleted = await _userModel.Delete(userId);
+            var deleted = await _userModel.Delete(userName);
             return new CreatedAtRouteResult("GetUser", new { userName = deleted.UserName }, deleted);
         }
 

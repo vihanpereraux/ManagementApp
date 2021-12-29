@@ -1,14 +1,18 @@
+using Blazored.LocalStorage;
 using ManagmentAppTestOne.Server.Data;
 using ManagmentAppTestOne.Server.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ManagmentAppTestOne.Server
 {
@@ -29,14 +33,37 @@ namespace ManagmentAppTestOne.Server
                 Configuration.GetConnectionString("DefaultConnection"))
             );
 
+            /*services.AddIdentity<SystemUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.HttpOnly = false;
+                options.Events.OnRedirectToLogin = context =>
+                {
+                    context.Response.StatusCode = 401;
+                    return Task.CompletedTask;
+                };
+            });*/
+
+            services.AddControllers().AddNewtonsoftJson();
+
             services.AddScoped<ICompanyModel, CompanyModel>();
             services.AddScoped<IProjectModel, ProjectModel>();
             services.AddScoped<IUserModel, UserModel>();
             services.AddScoped<ICollaborationModel, CollaborationModel>();
             services.AddScoped<ITicketModel, TicketModel>();
+            //services.AddScoped<IAuthModel, AuthModel>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+            services.AddAuthentication(options => 
+            {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            }
+            ).AddCookie();
+
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,6 +86,9 @@ namespace ManagmentAppTestOne.Server
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

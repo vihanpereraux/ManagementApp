@@ -1,6 +1,16 @@
-﻿@page "/"
+﻿@inject ISyncLocalStorageService LocalStorage
 
-<h1>Hello, world!</h1>
+@page "/"
+
+<AuthorizeView>
+    <NotAuthorized>
+        <h1>Hello, Stranger!</h1>
+    </NotAuthorized>
+    <Authorized>
+        <h1>Hello, @LocalStorage.GetItemAsString("username")!</h1>
+    </Authorized>
+</AuthorizeView>
+
 
 Welcome to your new app.
 

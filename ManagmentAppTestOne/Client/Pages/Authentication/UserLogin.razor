@@ -1,0 +1,95 @@
+﻿@*Route*@
+@page "/login"
+
+@inject ILocalStorageService LocalStorage
+
+@*Getting HttpClient class*@
+@inject HttpClient http
+
+@*For redirecting purposes*@
+@inject NavigationManager Navigation
+
+@*For JS confirmations*@
+@inject IJSRuntime js
+
+@inject AuthenticationStateProvider AuthStateProvider
+
+@if (users != null)
+{
+    <h3>User Login</h3>
+
+    <EditForm Model="@loggedUser" OnValidSubmit="@LoginUser">
+        <DataAnnotationsValidator></DataAnnotationsValidator>
+
+        <div class="form-group">
+            <label class="control-label">Name</label>
+            <div class = "col-sm-12">
+                <InputSelect @bind-Value="loggedUser.UserName">
+                    @foreach(var user in users)
+                    {
+                       <option value=@user.UserName>@user.UserName</option> 
+                    } 
+                </InputSelect>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">Email</label>
+            <InputText @bind-Value="loggedUser.UserEmail"></InputText>
+            <ValidationMessage For="@(() => loggedUser.UserEmail)" />
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">Password</label>
+            <InputText @bind-Value="loggedUser.UserPassword"></InputText>
+            <ValidationMessage For="@(() => loggedUser.UserPassword)" />
+        </div>
+
+        <button type="submit" class="btn btn-success">Login</button>
+
+    </EditForm>
+}
+
+
+@code {
+
+    AuthEntity loggedUser = new AuthEntity();
+    UserEntity user = new UserEntity();
+    UserEntity[] users { get; set; }
+
+    public async Task LoginUser()
+    {
+        //await LocalStorage.SetItemAsync<string>("Email", loggedUser.UserEmail);
+        //Navigation.NavigateTo("/companies");
+
+        //await LocalStorage.SetItemAsync<string>("email", loggedUser.UserEmail);
+        //await http.PostAsJsonAsync("api/auth", loggedUser);
+
+        string name = loggedUser.UserName;
+        user = await http.GetFromJsonAsync<UserEntity>($"api/user/{name}");
+
+        loggedUser.UserRole = user.UserRole;
+
+        var result = await http.PostAsJsonAsync("api/auth", loggedUser);
+        if (result.IsSuccessStatusCode)
+        {
+            Console.WriteLine(result);
+            await LocalStorage.SetItemAsync<string>("email", loggedUser.UserEmail);
+            await LocalStorage.SetItemAsync<string>("role", loggedUser.UserRole);
+            await LocalStorage.SetItemAsync<string>("username", loggedUser.UserEmail);
+            await AuthStateProvider.GetAuthenticationStateAsync();
+            Navigation.NavigateTo("/companies");  
+        }
+        else
+        {
+            await js.InvokeVoidAsync("alert", "Wrong credentials, try again !");
+            Navigation.NavigateTo("/login"); 
+        }
+
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        users = await http.GetFromJsonAsync<UserEntity[]>("api/user");
+    }
+}

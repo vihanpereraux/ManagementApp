@@ -16,17 +16,20 @@ namespace ManagmentAppTestOne.Shared.Entities
         public string UserName { get; set; }
 
         [Required]
-        public string UserOccupation { get; set; }  
+        public string UserOccupation { get; set; }
 
         [Required]
-        public string UserCapacity { get; set; }    
-        
+        public string UserCapacity { get; set; }
+
         [Required]
-        public string UserEmail { get; set; }   
+        public string UserEmail { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
         public string UserPassword { get; set; }
+
+        [Required]
+        public string UserRole { get; set; }
 
         //Referencing the parent table for Collaboration Entity
         public ICollection<CollaborationEntity> Collaborations { get; set; }

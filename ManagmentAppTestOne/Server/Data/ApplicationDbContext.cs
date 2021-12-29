@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ManagmentAppTestOne.Shared.Entities;
-
+using ManagmentAppTestOne.Server.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace ManagmentAppTestOne.Server.Data
 {
-    public class ApplicationDbContext: DbContext
+    public class ApplicationDbContext : DbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {

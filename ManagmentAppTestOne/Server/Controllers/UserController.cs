@@ -20,6 +20,7 @@ namespace ManagmentAppTestOne.Server.Controllers
             _userModel = userModel;
         }
 
+        
         [HttpGet]
         public async Task<ActionResult> GetUsers()
         {

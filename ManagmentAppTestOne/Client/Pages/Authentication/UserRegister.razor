@@ -1,0 +1,82 @@
+﻿@*Route*@
+@page "/register"
+
+@inject ILocalStorageService LocalStorage
+
+@*Getting HttpClient class*@
+@inject HttpClient http
+
+@*For redirecting purposes*@
+@inject NavigationManager Navigation
+
+@*For JS confirmations*@
+@inject IJSRuntime js
+
+@inject AuthenticationStateProvider AuthStateProvider
+
+<h3>User Register</h3>
+
+<EditForm Model="@registeredUser" OnValidSubmit="@RegisterUser">
+        <DataAnnotationsValidator></DataAnnotationsValidator>
+
+        <div class="form-group">
+            <label class="control-label">Name</label>
+            <InputText @bind-Value="registeredUser.UserName"></InputText>
+            <ValidationMessage For="@(() => registeredUser.UserName)" />
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">Occupation</label>
+            <InputText @bind-Value="registeredUser.UserOccupation"></InputText>
+            <ValidationMessage For="@(() => registeredUser.UserOccupation)" />
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">Capabilities</label>
+            <InputText @bind-Value="registeredUser.UserCapacity"></InputText>
+            <ValidationMessage For="@(() => registeredUser.UserCapacity)" />
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">Email</label>
+            <InputText @bind-Value="registeredUser.UserEmail"></InputText>
+            <ValidationMessage For="@(() => registeredUser.UserEmail)" />
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">Password</label>
+            <InputText @bind-Value="registeredUser.UserPassword"></InputText>
+            <ValidationMessage For="@(() => registeredUser.UserPassword)" />
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">Role</label>
+                <InputSelect @bind-Value="registeredUser.UserRole">
+                    <option value="Owner">Owner</option> 
+                    <option value="Employee">Employee</option> 
+               </InputSelect>
+            <ValidationMessage For="@(() => registeredUser.UserPassword)" />
+        </div>
+
+        <button type="submit" class="btn btn-success">Register</button>
+
+</EditForm>
+
+@code {
+
+    UserEntity registeredUser = new UserEntity();
+
+    public async Task RegisterUser()
+    {
+        var result = await http.PostAsJsonAsync("api/user", registeredUser);
+        if(result.IsSuccessStatusCode)
+        {   
+            Navigation.NavigateTo("/login");
+        }
+        else
+        {
+            await js.InvokeVoidAsync("alert", "User is already existing in the system.");
+            Navigation.NavigateTo("/login");
+        }
+    }
+}

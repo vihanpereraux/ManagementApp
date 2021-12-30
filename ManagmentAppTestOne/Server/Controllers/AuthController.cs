@@ -27,22 +27,14 @@ namespace ManagmentAppTestOne.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<UserEntity>> LoginUser(AuthEntity authUser)
         {
-            UserEntity loggedInUser = await _applicationDbContext.Users.Where(u => u.UserEmail == authUser.UserEmail &&
-                u.UserPassword == authUser.UserPassword).FirstOrDefaultAsync();
+            UserEntity loggedInUser = await _applicationDbContext.Users.Where(
+                u => u.UserEmail == authUser.UserEmail &&
+                u.UserPassword == authUser.UserPassword && 
+                u.UserName == authUser.UserName).
+                FirstOrDefaultAsync();
 
             if (loggedInUser != null) 
             {
-                //create a claim
-                var claim = new Claim(ClaimTypes.Name, loggedInUser.UserEmail);
-
-                //create claimsIdentity
-                var claimsIdentity = new ClaimsIdentity(new[] { claim }, "serverAuth");
-
-                //create claimsPrincipal
-                var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-
-                //SignIn user
-                //await HttpContext.SignInAsync(claimsPrincipal);
                 return loggedInUser;
             }
             else 

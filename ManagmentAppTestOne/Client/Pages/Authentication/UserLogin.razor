@@ -14,14 +14,22 @@
 
 @inject AuthenticationStateProvider AuthStateProvider
 
-@if (users != null)
+@if (users == null)
+{ 
+    <text>Loading</text>
+}
+else if(users.Length == 0)
+{
+    <text>You need to add account before logging to the system</text>
+}
+else
 {
     <h3>User Login</h3>
 
     <EditForm Model="@loggedUser" OnValidSubmit="@LoginUser">
         <DataAnnotationsValidator></DataAnnotationsValidator>
 
-        <div class="form-group">
+        @*<div class="form-group">
             <label class="control-label">Name</label>
             <div class = "col-sm-12">
                 <InputSelect @bind-Value="loggedUser.UserName">
@@ -31,6 +39,12 @@
                     } 
                 </InputSelect>
             </div>
+        </div>*@
+
+        <div class="form-group">
+            <label class="control-label">Name</label>
+            <InputText @bind-Value="loggedUser.UserName"></InputText>
+            <ValidationMessage For="@(() => loggedUser.UserName)" />
         </div>
 
         <div class="form-group">
@@ -46,6 +60,8 @@
         </div>
 
         <button type="submit" class="btn btn-success">Login</button>
+        <br>
+        <a href="/register">Register from here</a>
 
     </EditForm>
 }
@@ -59,33 +75,46 @@
 
     public async Task LoginUser()
     {
-        //await LocalStorage.SetItemAsync<string>("Email", loggedUser.UserEmail);
-        //Navigation.NavigateTo("/companies");
+        string name = "";
+        foreach (var user in users)
+        {   
+            if(loggedUser.UserName == user.UserName)
+            {
+                name = loggedUser.UserName;
+            }
+        }
 
-        //await LocalStorage.SetItemAsync<string>("email", loggedUser.UserEmail);
-        //await http.PostAsJsonAsync("api/auth", loggedUser);
+        Console.WriteLine(name);
+        //string name = loggedUser.UserName;
 
-        string name = loggedUser.UserName;
-        user = await http.GetFromJsonAsync<UserEntity>($"api/user/{name}");
-
-        loggedUser.UserRole = user.UserRole;
-
-        var result = await http.PostAsJsonAsync("api/auth", loggedUser);
-        if (result.IsSuccessStatusCode)
+        if(!string.IsNullOrEmpty(name))
         {
-            Console.WriteLine(result);
-            await LocalStorage.SetItemAsync<string>("email", loggedUser.UserEmail);
-            await LocalStorage.SetItemAsync<string>("role", loggedUser.UserRole);
-            await LocalStorage.SetItemAsync<string>("username", loggedUser.UserEmail);
-            await AuthStateProvider.GetAuthenticationStateAsync();
-            Navigation.NavigateTo("/companies");  
+
+            user = await http.GetFromJsonAsync<UserEntity>($"api/user/{name}");
+
+            loggedUser.UserRole = user.UserRole;
+
+            var result = await http.PostAsJsonAsync("api/auth", loggedUser);
+            if (result.IsSuccessStatusCode)
+            {
+                Console.WriteLine(result);
+                await LocalStorage.SetItemAsync<string>("email", loggedUser.UserEmail);
+                await LocalStorage.SetItemAsync<string>("role", loggedUser.UserRole);
+                await LocalStorage.SetItemAsync<string>("username", loggedUser.UserEmail);
+                await AuthStateProvider.GetAuthenticationStateAsync();
+                Navigation.NavigateTo("/companies");  
+            }
+            else
+            {
+                await js.InvokeVoidAsync("alert", "Wrong credentials, try again !");
+                Navigation.NavigateTo("/login"); 
+            } 
         }
         else
         {
             await js.InvokeVoidAsync("alert", "Wrong credentials, try again !");
-            Navigation.NavigateTo("/login"); 
+            Navigation.NavigateTo("/login");
         }
-
     }
 
     protected override async Task OnInitializedAsync()

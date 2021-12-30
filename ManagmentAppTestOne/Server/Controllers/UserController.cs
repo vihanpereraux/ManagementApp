@@ -36,8 +36,17 @@ namespace ManagmentAppTestOne.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<UserEntity>> Post(UserEntity userModel)
         {
-            await _userModel.Post(userModel);
-            return new CreatedAtRouteResult("GetUser", new { userName = userModel.UserName }, userModel);
+            var result = await _userModel.Post(userModel);
+            if(result != null) 
+            {
+                return Ok(result);
+            }
+            else 
+            {
+                return BadRequest(result);
+            }
+            
+            //return new CreatedAtRouteResult("GetUser", new { userName = userModel.UserName }, userModel);
         }
 
         [HttpPut]
@@ -51,7 +60,8 @@ namespace ManagmentAppTestOne.Server.Controllers
         public async Task<ActionResult> Delete(string userName)
         {
             var deleted = await _userModel.Delete(userName);
-            return new CreatedAtRouteResult("GetUser", new { userName = deleted.UserName }, deleted);
+            return Ok(deleted);
+            //return new CreatedAtRouteResult("GetUser", new { userName = deleted.UserName }, deleted);
         }
 
 

@@ -10,6 +10,8 @@
 @*For redirecting purposes*@
 @inject NavigationManager Navigation
 
+@inject ISyncLocalStorageService LocalStorage
+
 @using System.Linq;
 
 <h3 class="mb-5">Tickets</h3>
@@ -65,9 +67,9 @@ else
             }
         </tbody>
     </table>
-
-    <a class="btn btn-success mt-3" href="/tickets/create/@projectId">Add Task</a>
 }
+<br>
+<a class="btn btn-success mt-3" href="/tickets/create/@projectId">Add Task</a>
 
 
 <h3 class="mt-5">Assigned Users</h3>
@@ -129,7 +131,15 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        await LoadTickets();
+        if (!string.IsNullOrEmpty(LocalStorage.GetItemAsString("username")))
+        {   
+            await LoadTickets();    
+        }
+        else
+        {
+            Navigation.NavigateTo("/login");
+        }
+
     }
 
     async Task LoadTickets()

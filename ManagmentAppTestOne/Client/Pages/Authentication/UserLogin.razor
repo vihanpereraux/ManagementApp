@@ -100,7 +100,7 @@ else
                 Console.WriteLine(result);
                 await LocalStorage.SetItemAsync<string>("email", loggedUser.UserEmail);
                 await LocalStorage.SetItemAsync<string>("role", loggedUser.UserRole);
-                await LocalStorage.SetItemAsync<string>("username", loggedUser.UserEmail);
+                await LocalStorage.SetItemAsync<string>("username", loggedUser.UserName);
                 await AuthStateProvider.GetAuthenticationStateAsync();
                 Navigation.NavigateTo("/companies");  
             }

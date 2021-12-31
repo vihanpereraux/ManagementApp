@@ -1,0 +1,279 @@
+﻿@*Route*@
+@page "/reports"
+
+@*Getting HttpClient class*@
+@inject HttpClient http
+
+@*For JS confirmations*@
+@inject IJSRuntime js
+
+@*For redirecting purposes*@
+@inject NavigationManager Navigation
+
+@inject ISyncLocalStorageService LocalStorage
+
+<h3>Reports</h3>
+
+@if (users == null)
+{
+    <text>Loading..</text>
+}
+else if (users.Length == 0)
+{
+    <text>No users available to generate reports</text>
+}
+else
+{
+    <EditForm Model="@selectedUser" OnValidSubmit="@LoadTickets">
+        <DataAnnotationsValidator></DataAnnotationsValidator>
+        <div class="form-group">
+             <label class="control-label">Allocated User</label>
+             <div class = "col-sm-12">
+                <InputSelect @bind-Value="selectedUser.UserId">
+                    @foreach(var user in users)
+                    {
+                        <option value="@user.UserId">@user.UserName</option>    
+                    }
+               </InputSelect>
+               <ValidationMessage For="@(() => selectedUser.UserId)" />
+             </div>
+         </div>
+        <button type="submit" @onclick="GetChart" class="btn btn-success">Get Stuff</button>
+    </EditForm>
+}
+
+<div class="mt-5"></div>
+
+
+@if (tickets != null && projects != null)
+{
+    foreach (var user in users)
+    {
+        if(selectedUser.UserId == user.UserId)
+        {
+            <h5>Ongoing Tasks of @user.UserName</h5>
+        }
+    }
+    <table class="table table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th style="text-align:center">Project</th>
+                <th style="text-align:center">Task</th>
+                <th style="text-align:center">Task Details</th>
+                <th style="text-align:center">Task State</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var ticket in tickets)
+            {
+                @if (ticket.TicketState == "Ongoing")
+                {
+                    counter = counter + 1;
+                    <tr>
+                        <td class="col-lg-3" style="text-align:center">
+                            @foreach (var project in projects)
+                            {
+                                if(ticket.ProjectId == project.ProjectId)
+                                {
+                                    <a class="text-decoration-none" href="/tickets/@project.ProjectId">
+                                        <p>@project.ProjectName</p>
+                                    </a>
+                                }
+                            }
+                        </td>
+                        <td class="col-lg-3" style="text-align:center">
+                            @ticket.TicketTitle
+                        </td>
+                        <td class="col-lg-3" style="text-align:center">
+                            @ticket.TicketDescription
+                        </td>
+                        <td class="col-lg-3" style="text-align:center">
+                            @ticket.TicketState   
+                        </td>
+                    </tr>
+                } 
+            }
+        </tbody>
+    </table>
+
+
+    <a class="btn btn-success" @onclick="GetChart" >Chart</a>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-7">
+                <div style=
+                    "
+                        width:500px;
+                        height:200px;
+                    " 
+                id="chartdiv" class="mx-auto d-block"></div>
+            </div>
+            <div class="col-lg-5">
+                <p class="mx-auto d-block">
+                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
+                    when an unknown printer took a galley of type and scrambled it to make a type 
+                    specimen book. It has survived not only five centuries, but also the leap into 
+                    electronic typesetting, remaining essentially unchanged.
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="mt-5"></div>
+
+    foreach (var user in users)
+    {
+        if(selectedUser.UserId == user.UserId)
+        {
+            <h5>Completed Tasks of @user.UserName</h5>
+        }
+    }
+    <table class="table table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th style="text-align:center">Project</th>
+                <th style="text-align:center">Task</th>
+                <th style="text-align:center">Task Details</th>
+                <th style="text-align:center">Task State</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var ticket in tickets)
+            {
+                @if (ticket.TicketState == "Completed")
+                {
+                    <tr>
+                        <td class="col-lg-3" style="text-align:center">
+                            @foreach (var project in projects)
+                            {
+                                if(ticket.ProjectId == project.ProjectId)
+                                {
+                                    <a class="text-decoration-none" href="/tickets/@project.ProjectId">
+                                        <p>@project.ProjectName</p>
+                                    </a>
+                                }
+                            }
+                        </td>
+                        <td class="col-lg-3" style="text-align:center">
+                            @ticket.TicketTitle
+                        </td>
+                        <td class="col-lg-3" style="text-align:center">
+                            @ticket.TicketDescription
+                        </td>
+                        <td class="col-lg-3" style="text-align:center">
+                            @ticket.TicketState   
+                        </td>
+                    </tr>
+                } 
+            }
+        </tbody>
+    </table>
+
+    <div class="mt-5"></div>
+
+    foreach (var user in users)
+    {
+        if(selectedUser.UserId == user.UserId)
+        {
+            <h5>Successful Tasks of @user.UserName</h5>
+        }
+    }
+    <table class="table table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th style="text-align:center">Project</th>
+                <th style="text-align:center">Task</th>
+                <th style="text-align:center">Task Details</th>
+                <th style="text-align:center">Task State</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var ticket in tickets)
+            {
+                @if (ticket.TicketState == "Successful")
+                {
+                    <tr>
+                        <td class="col-lg-3" style="text-align:center">
+                            @foreach (var project in projects)
+                            {
+                                if(ticket.ProjectId == project.ProjectId)
+                                {
+                                    <a class="text-decoration-none" href="/tickets/@project.ProjectId">
+                                        <p>@project.ProjectName</p>
+                                    </a>
+                                }
+                            }
+                        </td>
+                        <td class="col-lg-3" style="text-align:center">
+                            @ticket.TicketTitle
+                        </td>
+                        <td class="col-lg-3" style="text-align:center">
+                            @ticket.TicketDescription
+                        </td>
+                        <td class="col-lg-3" style="text-align:center">
+                            @ticket.TicketState   
+                        </td>
+                    </tr>
+                } 
+            }
+        </tbody>
+    </table>
+}
+
+
+
+@code {
+
+    TicketEntity[] tickets { get; set; }
+
+    UserEntity[] users { get; set; }
+
+    ProjectEntity[] projects { get; set; }
+
+    UserReportEntity selectedUser = new UserReportEntity();
+
+    int length;
+
+    int counter = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!string.IsNullOrEmpty(LocalStorage.GetItemAsString("username")))
+        {
+            await LoadUsers();
+            await LoadProjects();
+        }
+        else
+        {
+            Navigation.NavigateTo("/login");
+        }
+    }
+
+    public async Task GetChart()
+    {
+        RecordEntity ongoingRecords = new RecordEntity();
+
+        ongoingRecords.StateTicketCount = counter;
+        ongoingRecords.AllTicketCount = length;
+
+        await js.InvokeVoidAsync("ss", ongoingRecords.AllTicketCount, ongoingRecords.StateTicketCount);
+    }
+
+    public async Task LoadTickets()
+    {
+        tickets = await http.GetFromJsonAsync<TicketEntity[]>($"api/report/{selectedUser.UserId}");
+        length = tickets.Length;
+    }
+
+    public async Task LoadUsers()
+    {
+        users = await http.GetFromJsonAsync<UserEntity[]>("api/user");
+    }
+
+    public async Task LoadProjects()
+    {
+        projects = await http.GetFromJsonAsync<ProjectEntity[]>("api/project");
+    }
+
+}

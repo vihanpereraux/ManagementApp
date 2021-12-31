@@ -10,7 +10,7 @@
 <h3 class="mb-5">Update Ticket</h3>
 
 @*<TicketForm buttonText = "Add Ticket" ticket = "@ticket" OnValidSubmit = "@UpdateTicketById"></TicketForm>*@
-<CollaborationForm buttonText = "Add Ticket" projectId = "@projectId" ticket = "@ticket" OnValidSubmit = "@UpdateTickets"></CollaborationForm>
+<CollaborationForm buttonText = "Update Ticket" projectId = "@projectId" ticket = "@ticket" OnValidSubmit = "@UpdateTickets"></CollaborationForm>
 
 
 @code {
@@ -32,7 +32,7 @@
     async Task UpdateTickets()
     {
         await http.PutAsJsonAsync("api/ticket", ticket);
-        Navigation.NavigateTo($"/companies");
+        Navigation.NavigateTo($"/tickets/{projectId}");
     }
 
 }

@@ -1,4 +1,5 @@
 ﻿using ManagmentAppTestOne.Server.Data;
+using ManagmentAppTestOne.Server.Models;
 using ManagmentAppTestOne.Shared.Entities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
@@ -9,6 +10,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
+
 namespace ManagmentAppTestOne.Server.Controllers
 {
     [ApiController]
@@ -16,53 +18,26 @@ namespace ManagmentAppTestOne.Server.Controllers
     public class AuthController: ControllerBase
     {
         private readonly ILogger<AuthController> _logger;
-        public readonly ApplicationDbContext _applicationDbContext;
-  
-        public AuthController(ILogger<AuthController> logger, ApplicationDbContext applicationDbContext)
+        private readonly IAuthModel _authModel;
+
+        public AuthController(ILogger<AuthController> logger, IAuthModel authModel)
         {
             _logger = logger;
-            _applicationDbContext = applicationDbContext;
+            _authModel = authModel;
         }
 
         [HttpPost]
         public async Task<ActionResult<UserEntity>> LoginUser(AuthEntity authUser)
         {
-            UserEntity loggedInUser = await _applicationDbContext.Users.Where(
-                u => u.UserEmail == authUser.UserEmail &&
-                u.UserPassword == authUser.UserPassword && 
-                u.UserName == authUser.UserName).
-                FirstOrDefaultAsync();
-
-            if (loggedInUser != null) 
+            var result = await _authModel.LoginUser(authUser);
+            if (result != null)
             {
-                return loggedInUser;
+                return result;
             }
-            else 
+            else
             {
                 return BadRequest();
             }
-        }
-
-        /*[HttpGet("getcurrentuser")]
-        public async Task<ActionResult<AuthEntity>> GetCurrentUser() 
-        { 
-            AuthEntity currentUser = new AuthEntity();
-
-            if (AuthEntity.Identity.IsAuthenticated) 
-            {
-                currentUser.UserEmail = AuthEntity.FindFirstValue(ClaimTypes.Name);
-            }
-            return await Task.FromResult(currentUser);
-        }*/
-
-        [HttpGet("logoutuser")]
-        public async Task<ActionResult<string>> LogoutUser() 
-        {
-            await HttpContext.SignOutAsync();
-            return "Success";
-        }
-
-
-        
+        }  
     }
 }

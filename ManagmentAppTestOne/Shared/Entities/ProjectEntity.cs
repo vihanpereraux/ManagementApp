@@ -22,6 +22,7 @@ namespace ManagmentAppTestOne.Shared.Entities
         [Required]
         public string ProjectStatus { get; set; }
 
+        [Required]
         [DataType(DataType.Date)]
         [Column(TypeName = "Date")]
         public DateTime ProjectStartedDate { get; set; }

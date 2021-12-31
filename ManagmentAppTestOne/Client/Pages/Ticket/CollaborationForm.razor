@@ -31,7 +31,11 @@ else
 
         <div class="form-group">
             <label class="control-label">Ticket Status</label>
-            <InputText  @bind-Value="ticket.TicketState"></InputText>
+                <InputSelect @bind-Value="ticket.TicketState">
+                     <option value="Ongoing">Ongoing</option> 
+                     <option value="Completed">Completed</option>
+                     <option value="Successful">Successful</option>
+                </InputSelect>
             <ValidationMessage For="@(() => ticket.TicketState)" />
         </div>
 
@@ -46,6 +50,12 @@ else
                </InputSelect>
              </div>
          </div>
+
+        <div class="form-group">
+            <label class="control-label">Started Date</label>
+            <InputDate  @bind-Value="ticket.TicketStartedDate"></InputDate>
+            <ValidationMessage For="@(() => ticket.TicketStartedDate)" />
+        </div>
 
         <button type="submit" class="btn btn-success">@buttonText</button>
     </EditForm>

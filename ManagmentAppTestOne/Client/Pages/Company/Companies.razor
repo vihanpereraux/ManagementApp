@@ -10,6 +10,9 @@
 @*For redirecting purposes*@
 @inject NavigationManager Navigation
 
+@inject ISyncLocalStorageService LocalStorage
+
+
 
 <h3 class="mb-5">Companies</h3>
 
@@ -29,9 +32,7 @@ else
                 <th style="text-align:center">Company Name</th>
                 <th style="text-align:center">Company Details</th>
                 <th style="text-align:center">Employees</th>
-                @*<th style="text-align:center">Established Date</th>*@
-                <th style="text-align:center">Actions</th>
-                @*<th>Delete</th>*@
+                <th style="text-align:center"></th>
             </tr>
         </thead>
         <tbody>
@@ -47,9 +48,6 @@ else
                     <td class="col-lg-2" style="text-align:center">
                         @company.NumOfEmployees
                     </td>
-                    @*<td class="col-lg-2" style="text-align:center">
-                        @company.EstablishedDate.ToShortDateString()
-                    </td>*@
                     <td class="col-lg-3" style="text-align:center">
                         <button class="btn btn-success" href="/companies/edit/@company.CompanyName" @onclick="@(() => UpdateCompany(company.CompanyName))">Update</button>
                         <button class="btn btn-danger" @onclick="@(() => DeleteCompany(company.CompanyName))">Delete</button>
@@ -62,6 +60,10 @@ else
     <a class="btn btn-success mt-5" href="/companies/create">Add Copmpany</a>
 }
 
+<br>
+<a class="btn btn-success mt-5" @onclick="GetChart" >Chart</a>
+<div id="chartdiv"></div>
+
 
 @code {
     // An object array of company objects - CompanyModel
@@ -69,13 +71,26 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        await LoadComapnies();
+        if (!string.IsNullOrEmpty(LocalStorage.GetItemAsString("username")))
+        {
+            await LoadComapnies();   
+        }
+        else
+        {
+            Navigation.NavigateTo("/login");
+        }
     }
 
     async Task LoadComapnies()
     {
         companies = await http.GetFromJsonAsync<CompanyEntity[]>("api/company");
 
+        //await js.InvokeVoidAsync("Chart");
+    }
+
+    public async Task GetChart()
+    {
+        await js.InvokeVoidAsync("ss");
     }
 
     async Task UpdateCompany(string companyName)

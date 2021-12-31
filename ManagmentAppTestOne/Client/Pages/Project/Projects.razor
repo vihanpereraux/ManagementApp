@@ -10,6 +10,8 @@
 @*For redirecting purposes*@
 @inject NavigationManager Navigation
 
+@inject ISyncLocalStorageService LocalStorage
+
 @using System.Collections
 
 
@@ -31,9 +33,7 @@ else
                 <th style="text-align:center">Project</th>
                 <th style="text-align:center">Details</th>
                 <th style="text-align:center">Status</th>
-                @*<th style="text-align:center">Started Date</th>*@
-                <th style="text-align:center">Actions</th>
-                @*<th>Delete</th>*@
+                <th style="text-align:center"></th>
             </tr>
         </thead>
         <tbody>
@@ -49,9 +49,6 @@ else
                     <td class="col-lg-2" style="text-align:center">
                         @project.ProjectStatus
                     </td>
-                    @*<td class="col-lg-2" style="text-align:center">
-                        @project.ProjectStartedDate.ToShortDateString()
-                    </td>*@
                     <td class="col-lg-2" style="text-align:center">
                         <button class="btn btn-success" href="/projects/edit/@project.ProjectName" @onclick="@(() => UpdateProject(project.ProjectName))">Update</button>
                         <button class="btn btn-danger" @onclick="@(() => DeleteProject(project.ProjectName))">Delete</button>
@@ -63,91 +60,6 @@ else
 }
 <br>
 <a class="btn btn-success mt-5" href="/projects/create/@companyId">Add Project</a>
-
-    
-@*<h3 class="mt-5">Assigned Users</h3>
-
-@if (tickets == null && users == null)
-{
-    <text>Loading..</text>
-}
-else if (tickets.Length == 0 && users.Length == 0)
-{
-    <text>No Record Found</text>
-}
-else
-{   
-    <table class="table">
-        <thead class="table-dark">
-            <tr>
-                <th style="text-align:center">User</th>
-                <th style="text-align:center">Occupation</th>
-                <th style="text-align:center">Capacity</th>
-            </tr>
-        </thead>
-        <tbody>
-            @for ( int i = 0 ; i < tickets.Length ; i++ ) 
-            {
-               @for ( int j = 0 ; j < users.Length ; j++ ) 
-               {
-                   @if( tickets[i].UserId == users[j].UserId)
-                    {
-                       <tr>
-                           <td class="col-lg-4" style="text-align:center">
-                               @users[j].UserName 
-                           </td>
-                           <td class="col-lg-4" style="text-align:center">
-                               @users[j].UserOccupation 
-                           </td>
-                           <td class="col-lg-4" style="text-align:center">
-                               @users[j].UserCapacity
-                           </td>
-                       </tr> 
-                    }
-               }
-            }
-            @foreach ( var ticket in tickets)
-            {
-                @foreach ( var user in users)
-                {
-                    arlist.Add(user.UserName);
-                }
-            }
-            @foreach (string s in arlist)
-            {
-                @if (!arlist.Contains(s))
-                {
-                    arlist.Add(s);
-                }
-            }
-            @foreach (string item in arlist)
-            {
-              Console.WriteLine(item);
-            }
-            @foreach ( var ticket in tickets)
-            {
-                @foreach ( var user in users)
-                {
-                    @if( ticket.UserId == user.UserId )
-                    {
-                        <tr>
-                            <td class="col-lg-4" style="text-align:center">
-                                @user.UserName 
-                            </td>
-                            <td class="col-lg-4" style="text-align:center">
-                                @user.UserOccupation 
-                            </td>
-                            <td class="col-lg-4" style="text-align:center">
-                                @user.UserCapacity
-                            </td>
-                        </tr>
-                    }
-                }
-            }
-        </tbody>
-    </table>
-}*@
-
 
 
 @code {
@@ -164,7 +76,15 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        await LoadProjects();
+        if (!string.IsNullOrEmpty(LocalStorage.GetItemAsString("username")))
+        {
+            await LoadProjects();
+        }
+        else
+        {
+            Navigation.NavigateTo("/login");
+        }
+
     }
 
     async Task LoadProjects()

@@ -38,7 +38,7 @@ else
                <ValidationMessage For="@(() => selectedUser.UserId)" />
              </div>
          </div>
-        <button type="submit" @onclick="GetChart" class="btn btn-success">Get Stuff</button>
+        <button type="submit" class="btn btn-success">Get Stuff</button>
     </EditForm>
 }
 
@@ -68,7 +68,6 @@ else
             {
                 @if (ticket.TicketState == "Ongoing")
                 {
-                    counter = counter + 1;
                     <tr>
                         <td class="col-lg-3" style="text-align:center">
                             @foreach (var project in projects)
@@ -97,18 +96,18 @@ else
     </table>
 
 
-    <a class="btn btn-success" @onclick="GetChart" >Chart</a>
+    @*<a class="btn btn-success" @onclick="GetChart" >Chart</a>*@
     <div class="container">
         <div class="row">
-            <div class="col-lg-7">
+            <div class="col-lg-6">
                 <div style=
                     "
-                        width:500px;
+                        width:100%;
                         height:200px;
                     " 
                 id="chartdiv" class="mx-auto d-block"></div>
             </div>
-            <div class="col-lg-5">
+            <div class="col-lg-6">
                 <p class="mx-auto d-block">
                     Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
                     when an unknown printer took a galley of type and scrambled it to make a type 
@@ -170,6 +169,29 @@ else
         </tbody>
     </table>
 
+    @*<a class="btn btn-success" @onclick="GetCompletedChart" >Chart2</a>*@
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-7">
+                <div style=
+                    "
+                        width:500px;
+                        height:200px;
+                    " 
+                id="chartdiv2" class="mx-auto d-block"></div>
+            </div>
+            <div class="col-lg-5">
+                <p class="mx-auto d-block">
+                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
+                    when an unknown printer took a galley of type and scrambled it to make a type 
+                    specimen book. It has survived not only five centuries, but also the leap into 
+                    electronic typesetting, remaining essentially unchanged.
+                </p>
+            </div>
+        </div>
+    </div>
+
+
     <div class="mt-5"></div>
 
     foreach (var user in users)
@@ -219,6 +241,27 @@ else
             }
         </tbody>
     </table>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-7">
+                <div style=
+                    "
+                        width:500px;
+                        height:200px;
+                    " 
+                id="chartdiv3" class="mx-auto d-block"></div>
+            </div>
+            <div class="col-lg-5">
+                <p class="mx-auto d-block">
+                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
+                    when an unknown printer took a galley of type and scrambled it to make a type 
+                    specimen book. It has survived not only five centuries, but also the leap into 
+                    electronic typesetting, remaining essentially unchanged.
+                </p>
+            </div>
+        </div>
+    </div>
 }
 
 
@@ -235,7 +278,8 @@ else
 
     int length;
 
-    int counter = 0;
+    int ongoingCounter = 0;
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -252,18 +296,51 @@ else
 
     public async Task GetChart()
     {
-        RecordEntity ongoingRecords = new RecordEntity();
+        int ongoingCounter = 0;
+        foreach (var item in tickets)
+        {
+            if(item.TicketState == "Ongoing")
+            {
+                ongoingCounter++;
+            }
+        }
+        await js.InvokeVoidAsync("OngoingChart", length, ongoingCounter);
+        await GetCompletedChart();
+        await GetSuccessfulChart();
+    }
 
-        ongoingRecords.StateTicketCount = counter;
-        ongoingRecords.AllTicketCount = length;
+    public async Task GetCompletedChart()
+    {
+        int completedCounter = 0;
+        foreach (var item in tickets)
+        {
+            if(item.TicketState == "Completed")
+            {
+                completedCounter++;
+            }
+        }
+        await js.InvokeVoidAsync("CompletedChart", length, completedCounter);
+    }
 
-        await js.InvokeVoidAsync("ss", ongoingRecords.AllTicketCount, ongoingRecords.StateTicketCount);
+    public async Task GetSuccessfulChart()
+    {
+        int successfulCounter = 0;
+        foreach (var item in tickets)
+        {
+            if(item.TicketState == "Successful")
+            {
+                successfulCounter++;
+            }
+        }
+        await js.InvokeVoidAsync("SuccessChart", length, successfulCounter);
     }
 
     public async Task LoadTickets()
     {
         tickets = await http.GetFromJsonAsync<TicketEntity[]>($"api/report/{selectedUser.UserId}");
         length = tickets.Length;
+        await GetChart();
+        await GetCompletedChart();
     }
 
     public async Task LoadUsers()

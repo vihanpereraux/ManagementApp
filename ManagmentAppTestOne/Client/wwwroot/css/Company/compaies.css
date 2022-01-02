@@ -1,0 +1,64 @@
+﻿.company-heading {
+    font-family: 'Gilroy';
+    font-weight: 600;
+    margin-top: 20px;
+    line-height: 1.5;
+}
+
+.add-company-btn {
+    float: right;
+    background-color: #6C60FF;
+    width: 30%;
+    height: 45px;
+    margin-top: 20px;
+}
+.add-company-btn p{
+    font-family: 'Gilroy';
+    font-weight: 600;
+    color: white;
+    font-size: 15px;
+    padding-top: 5px;
+}
+
+table {
+    margin-top: 40px;
+    border: none;
+}
+
+.table-header {
+    border-bottom-width: -1px;
+    border-bottom-style: solid;
+    border-bottom-color: #8676FF;
+    border-top: 2px solid white;
+    border-radius: 20px;
+    font-family: 'Gilroy';
+}
+
+td {
+    border-bottom: 1px solid #EBEBEB !important;
+}
+
+.update-btn {
+    background-color: #6C60FF;
+    height: 40px;
+}
+.update-btn p{
+    font-family: 'Gilroy';
+    font-weight: 500;
+    color: white;
+    font-size: 14px;
+    padding-top: 1.5px;
+}
+
+.delete-btn {
+    background-color: #F87A82;
+    height: 40px;
+}
+.delete-btn p {
+    font-family: 'Gilroy';
+    font-weight: 500;
+    color: white;
+    font-size: 14px;
+    padding-top: 1.5px;
+}
+

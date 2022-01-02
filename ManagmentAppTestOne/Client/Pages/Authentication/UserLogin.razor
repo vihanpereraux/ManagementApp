@@ -24,46 +24,50 @@ else if(users.Length == 0)
 }
 else
 {
-    <h3>User Login</h3>
+    <div class="container form-row my-auto">
+        <div class="row">
 
-    <EditForm Model="@loggedUser" OnValidSubmit="@LoginUser">
-        <DataAnnotationsValidator></DataAnnotationsValidator>
-
-        @*<div class="form-group">
-            <label class="control-label">Name</label>
-            <div class = "col-sm-12">
-                <InputSelect @bind-Value="loggedUser.UserName">
-                    @foreach(var user in users)
-                    {
-                       <option value=@user.UserName>@user.UserName</option> 
-                    } 
-                </InputSelect>
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 my-auto">
+                <img class="login-img mx-auto d-block align-self-center" src="img/Authentication/Login Image.png">
             </div>
-        </div>*@
 
-        <div class="form-group">
-            <label class="control-label">Name</label>
-            <InputText @bind-Value="loggedUser.UserName"></InputText>
-            <ValidationMessage For="@(() => loggedUser.UserName)" />
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 my-auto">
+                <h4 id="login-text">Welcome to <br> The Manager Portal</h4>
+
+                <div class="login-form mx-auto d-block">
+                    <EditForm Model="@loggedUser" OnValidSubmit="@LoginUser">
+                        <DataAnnotationsValidator></DataAnnotationsValidator>
+
+                    <div class="form-group">
+                        <label id="label-text" for="InputUserName">Your name</label>
+                        <InputText @bind-Value="loggedUser.UserName" class="form-control"
+                            aria-describedby="emailHelp" placeholder="Enter name"></InputText>
+                        <ValidationMessage For="@(() => loggedUser.UserName)" />
+                    </div>
+
+                    <div class="form-group">
+                        <label id="label-text" for="InputUserEmail">Your email</label>
+                        <InputText @bind-Value="loggedUser.UserEmail" class="form-control"
+                            aria-describedby="emailHelp" placeholder="Enter email"></InputText>
+                        <ValidationMessage For="@(() => loggedUser.UserEmail)" />
+                    </div>
+
+                    <div class="form-group">
+                        <label id="label-text" for="InputUserPassword">Your password</label>
+                        <InputText @bind-Value="loggedUser.UserPassword" class="form-control"
+                            aria-describedby="emailHelp" placeholder="Enter password"></InputText>
+                        <ValidationMessage For="@(() => loggedUser.UserPassword)" />
+                    </div>
+
+                    <button type="submit" class="login-btn btn">Login</button>
+                    <br>
+                    <p id="register-nav-txt">Don't have an account ? <span style="color: #8676FF"><a href="/register">Register</a></span> from here</p>
+                    </EditForm>
+                </div>
+            </div>
+
         </div>
-
-        <div class="form-group">
-            <label class="control-label">Email</label>
-            <InputText @bind-Value="loggedUser.UserEmail"></InputText>
-            <ValidationMessage For="@(() => loggedUser.UserEmail)" />
-        </div>
-
-        <div class="form-group">
-            <label class="control-label">Password</label>
-            <InputText @bind-Value="loggedUser.UserPassword"></InputText>
-            <ValidationMessage For="@(() => loggedUser.UserPassword)" />
-        </div>
-
-        <button type="submit" class="btn btn-success">Login</button>
-        <br>
-        <a href="/register">Register from here</a>
-
-    </EditForm>
+    </div>
 }
 
 

@@ -15,8 +15,6 @@
 @using System.Collections
 
 
-<h3 class="mb-5">Projects</h3>
-
 @if (projects == null)
 {
     <text>Loading..</text>
@@ -27,39 +25,54 @@ else if (projects.Length == 0)
 }
 else
 {
-    <table class="table table-striped">
-        <thead class="table-dark">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 my-auto">
+                <h3 class="company-heading">Discover <br> Your Project Stats</h3>
+            </div>
+            <div class="col-lg-6 my-auto">
+                <a class="btn add-company-btn" href="/projects/create/@companyId"><p>Add Project</p></a>
+            </div>
+        </div>
+    </div>
+
+    <table class="table">
+        <thead class="table-header">
             <tr>
-                <th style="text-align:center">Project</th>
-                <th style="text-align:center">Details</th>
-                <th style="text-align:center">Status</th>
-                <th style="text-align:center"></th>
+                <th style="text-align:left; font-weight: 600; padding-top: 20px; padding-bottom: 20px;">Project</th>
+                <th style="text-align:left; font-weight: 600; padding-top: 20px; padding-bottom: 20px;">Details</th>
+                <th style="text-align:center; font-weight: 600; padding-top: 20px; padding-bottom: 20px;">Status</th>
+                <th style="text-align:center; font-weight: 600; padding-top: 20px; padding-bottom: 20px;"></th>
             </tr>
         </thead>
         <tbody>
             @foreach(var project in projects)
             {
                 <tr>
-                    <td class="col-lg-3" style="text-align:center; width:50%">
-                        <a href = "/tickets/@project.ProjectId">@project.ProjectName</a>
+                    <td class="col-lg-3" style="text-align:left; font-family: 'Gilroy'; 
+                        font-weight: 500; padding-top: 20px; padding-bottom: 20px;">
+                        <a style="color: #6C60FF; text-decoration: none; font-weight: 600;" 
+                            href = "/tickets/@project.ProjectId">@project.ProjectName</a>
                     </td>
-                    <td class="col-lg-5" style="text-align:center">
+                    <td class="col-lg-5" style="text-align:left; font-family: 'Gilroy'; 
+                        font-weight: 500; padding-top: 20px; padding-bottom: 20px; font-size: 15px; line-height:2.0;">
                         @project.ProjectDescription
                     </td>
-                    <td class="col-lg-2" style="text-align:center">
+                    <td class="col-lg-2" style="text-align:center; font-family: 'Gilroy'; 
+                        font-weight: 500; padding-top: 20px; padding-bottom: 20px; font-size: 15px;">
                         @project.ProjectStatus
                     </td>
-                    <td class="col-lg-2" style="text-align:center">
-                        <button class="btn btn-success" href="/projects/edit/@project.ProjectName" @onclick="@(() => UpdateProject(project.ProjectName))">Update</button>
-                        <button class="btn btn-danger" @onclick="@(() => DeleteProject(project.ProjectName))">Delete</button>
+                    <td class="col-lg-2" style="text-align:center; 
+                        padding-top: 20px; padding-bottom: 20px;">
+                        <button class="btn update-btn" href="/projects/edit/@project.ProjectName" @onclick="@(() => UpdateProject(project.ProjectName))"><p>Update</p></button>
+                        <button class="btn delete-btn" @onclick="@(() => DeleteProject(project.ProjectName))"><p>Delete</p></button>
                     </td>
                 </tr>   
             }
         </tbody>
     </table>
 }
-<br>
-<a class="btn btn-success mt-5" href="/projects/create/@companyId">Add Project</a>
 
 
 @code {

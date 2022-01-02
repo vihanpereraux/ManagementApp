@@ -14,7 +14,6 @@
 
 @using System.Linq;
 
-<h3 class="mb-5">Tickets</h3>
 
 @if (tickets == null && users == null)
 {
@@ -26,14 +25,25 @@ else if (tickets.Length == 0)
 }
 else
 {
-    <table class="table table-striped">
-        <thead class="table-dark">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 my-auto">
+                <h3 class="company-heading">Discover <br> Your Project Tickets</h3>
+            </div>
+            <div class="col-lg-6 my-auto">
+                <a class="btn add-company-btn" href="/tickets/create/@projectId"><p>Add ticket</p></a>
+            </div>
+        </div>
+    </div>
+
+    <table class="table">
+        <thead class="table-header">
             <tr>
-                <th style="text-align:center">Task</th>
-                <th style="text-align:center">Description</th>
-                <th style="text-align:center">State</th>
-                <th style="text-align:center">Incharge</th>
-                <th style="text-align:center"></th>
+                <th style="text-align:left; font-weight: 600; padding-top: 20px; padding-bottom: 20px;">Task</th>
+                <th style="text-align:left; font-weight: 600; padding-top: 20px; padding-bottom: 20px;">Description</th>
+                <th style="text-align:center; font-weight: 600; padding-top: 20px; padding-bottom: 20px;">State</th>
+                <th style="text-align:center; font-weight: 600; padding-top: 20px; padding-bottom: 20px;">Incharge</th>
+                <th style="text-align:center; font-weight: 600; padding-top: 20px; padding-bottom: 20px;"></th>
                 @*<th>Delete</th>*@
             </tr>
         </thead>
@@ -41,16 +51,20 @@ else
             @foreach(var ticket in tickets)
             {
                 <tr>
-                    <td class="col-lg-2" style="text-align:center; width:50%">
+                    <td class="col-lg-2" style="text-align:left; font-family: 'Gilroy'; 
+                        font-weight: 500; padding-top: 20px; padding-bottom: 20px;">
                         @ticket.TicketTitle
                     </td>
-                    <td class="col-lg-5 pr-3" style="text-align:center">
+                    <td class="col-lg-5 pr-3" style="text-align:left; font-family: 'Gilroy'; 
+                        font-weight: 500; padding-top: 20px; padding-bottom: 20px; font-size: 15px; line-height:2.0;">
                         @ticket.TicketDescription
                     </td>
-                    <td class="col-lg-1" style="text-align:center">
+                    <td class="col-lg-1" style="text-align:center; font-family: 'Gilroy'; 
+                        font-weight: 500; padding-top: 20px; padding-bottom: 20px; font-size: 15px;">
                         @ticket.TicketState
                     </td>
-                    <td class="col-lg-2" style="text-align:center">                         
+                    <td class="col-lg-2" style="text-align:center; font-family: 'Gilroy'; 
+                        font-weight: 500; padding-top: 20px; padding-bottom: 20px; font-size: 15px;">                         
                         @foreach( var user in users )
                         {
                             @if( @ticket.UserId == @user.UserId )
@@ -59,20 +73,18 @@ else
                             }   
                         }
                     </td>
-                    <td class="col-lg-5" style="text-align:center">
-                        <button class="btn btn-success" href="/tickets/edit/@ticket.TicketTitle/@projectId" @onclick="@(() => UpdateTicket(ticket.TicketTitle))">Update</button>
-                        <button class="btn btn-danger" @onclick="@(() => DeleteTicket(ticket.TicketTitle))">Delete</button>
+                    <td class="col-lg-5" style="text-align:center; 
+                        padding-top: 20px; padding-bottom: 20px;">
+                        <button class="btn update-btn" href="/tickets/edit/@ticket.TicketTitle/@projectId" @onclick="@(() => UpdateTicket(ticket.TicketTitle))"><p>Update</p></button>
+                        <button class="btn delete-btn" @onclick="@(() => DeleteTicket(ticket.TicketTitle))"><p>Delete</p></button>
                     </td>
                 </tr>   
             }
         </tbody>
     </table>
 }
-<br>
-<a class="btn btn-success mt-3" href="/tickets/create/@projectId">Add Task</a>
 
 
-<h3 class="mt-5">Assigned Users</h3>
 
 @if (users == null)
 {
@@ -84,6 +96,17 @@ else if (users.Length == 0)
 }
 else
 {   
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 my-auto">
+                <h3 class="company-heading">Already <br> Assigned Employees</h3>
+            </div>
+            <div class="col-lg-6 my-auto">
+                <a class="btn add-company-btn" href="/collaboration/create/@projectId"><p>Assign employee</p></a>
+            </div>
+        </div>
+    </div>
+
     <table class="table">
         <thead class="table-dark">
             <tr>

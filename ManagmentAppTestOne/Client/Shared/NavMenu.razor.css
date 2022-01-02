@@ -9,7 +9,16 @@
 
 .navbar-brand {
     font-size: 1.1rem;
+    font-family: 'Gilroy';
+    font-weight: 600;
+    color: #6C60FF;
 }
+
+.navbar {
+    background-color: #FFFFFF;
+    box-shadow: 5px 0 5px 2px 50px #F6F6F6;
+}
+
 
 .oi {
     width: 2rem;
@@ -32,8 +41,10 @@
     }
 
     .nav-item ::deep a {
-        color: #d7d7d7;
-        border-radius: 4px;
+        font-family: 'Gilroy';
+        font-weight: 600;
+        color: #7B7B7B;
+        border-radius: 8px;
         height: 3rem;
         display: flex;
         align-items: center;
@@ -41,13 +52,13 @@
     }
 
 .nav-item ::deep a.active {
-    background-color: rgba(255,255,255,0.25);
+    background-color: #6C60FF;
     color: white;
 }
 
 .nav-item ::deep a:hover {
-    background-color: rgba(255,255,255,0.1);
-    color: white;
+    background-color: #FBFBFB;
+    color: #6C60FF;
 }
 
 @media (min-width: 641px) {

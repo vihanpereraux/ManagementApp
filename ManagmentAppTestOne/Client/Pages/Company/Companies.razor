@@ -14,8 +14,6 @@
 
 
 
-<h3 class="mb-5">Companies</h3>
-
 @if (companies == null)
 {
     <text>Loading..</text>
@@ -26,43 +24,54 @@ else if (companies.Length == 0)
 }
 else
 {
-    <table class="table table-striped">
-        <thead class="table-dark">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 my-auto">
+                <h3 class="company-heading">Discover <br> Your Companies</h3>
+            </div>
+            <div class="col-lg-6 my-auto">
+                <a class="btn add-company-btn" href="/companies/create"><p>Add company</p></a>
+            </div>
+        </div>
+    </div>
+
+    <table class="table">
+        <thead class="table-header">
             <tr>
-                <th style="text-align:center">Company Name</th>
-                <th style="text-align:center">Company Details</th>
-                <th style="text-align:center">Employees</th>
-                <th style="text-align:center"></th>
+                <th style="text-align:left; font-weight: 600; padding-top: 20px; padding-bottom: 20px;">Company Name</th>
+                <th style="text-align:left; font-weight: 600; padding-top: 20px; padding-bottom: 20px;">Company Details</th>
+                <th style="text-align:center; font-weight: 600; padding-top: 20px; padding-bottom: 20px;">Employees</th>
+                <th style="text-align:center; font-weight: 600; padding-top: 20px; padding-bottom: 20px;">Modify</th>
             </tr>
         </thead>
         <tbody>
             @foreach(var company in companies)
             {
                 <tr>
-                    <td class="col-lg-3" style="text-align:center; width:50%">
-                        <a href = "/projects/@company.CompanyId">@company.CompanyName</a>
+                    <td class="col-lg-3" style="text-align:left; font-family: 'Gilroy'; 
+                        font-weight: 500; padding-top: 20px; padding-bottom: 20px;">
+                        <a style="color: #6C60FF; text-decoration: none; font-weight: 600;" 
+                            href = "/projects/@company.CompanyId">@company.CompanyName</a>
                     </td>
-                    <td class="col-lg-5" style="text-align:center">
+                    <td class="col-lg-5" style="text-align:left; font-family: 'Gilroy'; 
+                        font-weight: 500; padding-top: 20px; padding-bottom: 20px; font-size: 15px; line-height:2.0;">
                         @company.CompanyDescription
                     </td>
-                    <td class="col-lg-2" style="text-align:center">
+                    <td class="col-lg-2" style="text-align:center; font-family: 'Gilroy'; 
+                        font-weight: 500; padding-top: 20px; padding-bottom: 20px; font-size: 15px;">
                         @company.NumOfEmployees
-                    </td>
-                    <td class="col-lg-3" style="text-align:center">
-                        <button class="btn btn-success" href="/companies/edit/@company.CompanyName" @onclick="@(() => UpdateCompany(company.CompanyName))">Update</button>
-                        <button class="btn btn-danger" @onclick="@(() => DeleteCompany(company.CompanyName))">Delete</button>
+                    </td>   
+                    <td class="col-lg-3" style="text-align:center; 
+                        padding-top: 20px; padding-bottom: 20px;">
+                        <button class="btn update-btn" href="/companies/edit/@company.CompanyName" @onclick="@(() => UpdateCompany(company.CompanyName))"><p>Update</p></button>
+                        <button class="btn delete-btn" @onclick="@(() => DeleteCompany(company.CompanyName))"><p>Delete</p></button>
                     </td>
                 </tr>   
             }
         </tbody>
     </table>
-
-    <a class="btn btn-success mt-5" href="/companies/create">Add Copmpany</a>
 }
 
-<br>
-<a class="btn btn-success mt-5" @onclick="GetChart" >Chart</a>
-<div id="chartdiv"></div>
 
 
 @code {

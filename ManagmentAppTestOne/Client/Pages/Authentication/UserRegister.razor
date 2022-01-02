@@ -14,53 +14,91 @@
 
 @inject AuthenticationStateProvider AuthStateProvider
 
-<h3>User Register</h3>
+<div class="mx-auto d-block">
+
+</div>
+<div class="container heading-section">
+    <div class="row" style="padding-left: 100px">
+        <div class="col-12 col-sm-12 col-md-4 col-lg-4 my-auto">
+            <h4 id="register-text">Register to <br> The Manager Portal</h4>
+        </div>
+        <div class="col-2 col-sm-2 col-md-2 col-lg-2 my-auto">
+            <img class="register-img" src="img/Authentication/Register Img.png">
+        </div>
+    </div>  
+</div>
 
 <EditForm Model="@registeredUser" OnValidSubmit="@RegisterUser">
-        <DataAnnotationsValidator></DataAnnotationsValidator>
+    <DataAnnotationsValidator></DataAnnotationsValidator>
 
-        <div class="form-group">
-            <label class="control-label">Name</label>
-            <InputText @bind-Value="registeredUser.UserName"></InputText>
-            <ValidationMessage For="@(() => registeredUser.UserName)" />
+    <div class="container register-form">
+        <div class="row" style="padding-left: 100px">
+
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+
+                <div class="form-group">
+                    <label id="register-label-text" for="InputUserName">Your name</label>
+                    <InputText @bind-Value="registeredUser.UserName" class="form-control reg-form-ctrl"
+                        aria-describedby="emailHelp" placeholder="Enter name"></InputText>
+                    <ValidationMessage For="@(() => registeredUser.UserName)" />
+                </div>
+
+                <div class="form-group">
+                    <label id="register-label-text" for="InputUserOccupation">Your occupation</label>
+                    <InputText @bind-Value="registeredUser.UserOccupation" class="form-control reg-form-ctrl"
+                            aria-describedby="emailHelp" placeholder="Enter occupation"></InputText>
+                    <ValidationMessage For="@(() => registeredUser.UserOccupation)" />
+                </div>
+
+                <div class="form-group">
+                    <label id="register-label-text" for="InputUserPassword">Your password</label>
+                    <InputText @bind-Value="registeredUser.UserPassword" class="form-control reg-form-ctrl"
+                            aria-describedby="emailHelp" placeholder="Enter password"></InputText>
+                    <ValidationMessage For="@(() => registeredUser.UserPassword)" />
+                </div>
+            </div>
+
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6" style="margin-left: -60px">
+
+                <div class="form-group">
+                    <label id="register-label-text" for="InputUserEmail">Your email</label>
+                    <InputText @bind-Value="registeredUser.UserEmail" class="form-control reg-form-ctrl"
+                            aria-describedby="emailHelp" placeholder="Enter email"></InputText>
+                    <ValidationMessage For="@(() => registeredUser.UserEmail)" />
+                </div>
+
+                <div class="form-group">
+                    <label id="register-label-text" for="InputUserCapacity">Your capabilities</label>
+                    <InputTextArea @bind-Value="registeredUser.UserCapacity" class="form-control reg-form-ctrl"
+                            aria-describedby="emailHelp" placeholder="Enter capabilities"></InputTextArea>
+                    <ValidationMessage For="@(() => registeredUser.UserCapacity)" />
+                </div>
+
+                <div class="form-group">
+                    <label id="register-label-text" for="InputUserRole">Your role</label>
+                        <InputSelect @bind-Value="registeredUser.UserRole" class="form-control reg-form-ctrl"
+                            aria-describedby="emailHelp" placeholder="Enter role">
+                            <option value="Owner">Owner</option> 
+                            <option value="Employee">Employee</option> 
+                       </InputSelect>
+                    <ValidationMessage For="@(() => registeredUser.UserRole)" />
+                </div>
+
+                <button type="submit" class="register-btn btn">Register</button>
+                <br>
+                    <p id="register-nav-txt">Already have an account ? 
+                        <span style="color: #8676FF"><a href="/login">Login</a></span> from here</p>
+            </div>
         </div>
-
-        <div class="form-group">
-            <label class="control-label">Occupation</label>
-            <InputText @bind-Value="registeredUser.UserOccupation"></InputText>
-            <ValidationMessage For="@(() => registeredUser.UserOccupation)" />
-        </div>
-
-        <div class="form-group">
-            <label class="control-label">Capabilities</label>
-            <InputText @bind-Value="registeredUser.UserCapacity"></InputText>
-            <ValidationMessage For="@(() => registeredUser.UserCapacity)" />
-        </div>
-
-        <div class="form-group">
-            <label class="control-label">Email</label>
-            <InputText @bind-Value="registeredUser.UserEmail"></InputText>
-            <ValidationMessage For="@(() => registeredUser.UserEmail)" />
-        </div>
-
-        <div class="form-group">
-            <label class="control-label">Password</label>
-            <InputText @bind-Value="registeredUser.UserPassword"></InputText>
-            <ValidationMessage For="@(() => registeredUser.UserPassword)" />
-        </div>
-
-        <div class="form-group">
-            <label class="control-label">Role</label>
-                <InputSelect @bind-Value="registeredUser.UserRole">
-                    <option value="Owner">Owner</option> 
-                    <option value="Employee">Employee</option> 
-               </InputSelect>
-            <ValidationMessage For="@(() => registeredUser.UserPassword)" />
-        </div>
-
-        <button type="submit" class="btn btn-success">Register</button>
-
+    </div>
 </EditForm>
+
+
+
+
+
+
+
 
 @code {
 

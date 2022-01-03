@@ -4,27 +4,33 @@
 <EditForm Model="@project" OnValidSubmit="@OnValidSubmit">
     <DataAnnotationsValidator></DataAnnotationsValidator>
 
+    <h4 id="login-text">Manage <br> Company Projects</h4>
+
     <div class="form-group">
-        <label class="control-label">Project Name</label>
-        <InputText @bind-Value="project.ProjectName"></InputText>
+        <label id="label-text" for="InputUserName">Project Name</label>
+        <InputText @bind-Value="project.ProjectName" class="form-control"
+            aria-describedby="emailHelp" placeholder="Enter project name"></InputText>
         <ValidationMessage For="@(() => project.ProjectName)" />
     </div>
 
     <div class="form-group">
-        <label class="control-label">Project Details</label>
-        <InputText @bind-Value="project.ProjectDescription"></InputText>
+        <label id="label-text" for="InputUserName">Project Details</label>
+        <InputText @bind-Value="project.ProjectDescription" class="form-control"
+            aria-describedby="emailHelp" placeholder="Enter project description"></InputText>
         <ValidationMessage For="@(() => project.ProjectDescription)" />
     </div>
 
     <div class="form-group">
-        <label class="control-label">Started Date</label>
-        <InputDate  @bind-Value="project.ProjectStartedDate"></InputDate>
+        <label id="label-text" for="InputUserName">Started Date</label>
+        <InputDate  @bind-Value="project.ProjectStartedDate" class="form-control"
+            aria-describedby="emailHelp" placeholder="Enter project started date"></InputDate>
         <ValidationMessage For="@(() => project.ProjectStartedDate)" />
     </div>
 
     <div class="form-group">
-        <label class="control-label">Project Status</label>
-        <InputText  @bind-Value="project.ProjectStatus"></InputText>
+        <label id="label-text" for="InputUserName">Project Status</label>
+        <InputText  @bind-Value="project.ProjectStatus" class="form-control"
+            aria-describedby="emailHelp" placeholder="Enter project status"></InputText>
         <ValidationMessage For="@(() => project.ProjectStatus)" />
     </div>
 

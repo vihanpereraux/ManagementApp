@@ -13,8 +13,6 @@
 @inject ISyncLocalStorageService LocalStorage
 
 
-<h3 class="mb-5">Users</h3>
-
 @if (users == null)
 {
     <text>Loading..</text>
@@ -25,13 +23,24 @@ else if (users.Length == 0)
 }
 else
 {
-    <table class="table table-striped">
-        <thead class="table-dark">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 my-auto">
+                <h3 class="company-heading">Discover <br> Your Employees</h3>
+            </div>
+            <div class="col-lg-6 my-auto">
+                <a class="btn add-company-btn" href="/users/create"><p>Add employee</p></a>
+            </div>
+        </div>
+    </div>
+
+    <table class="table">
+        <thead class="table-header">
             <tr>
-                <th style="text-align:center">Name</th>
-                <th style="text-align:center">Occupation</th>
-                <th style="text-align:center">Capability</th>
-                <th style="text-align:center">Email</th>
+                <th style="text-align:left; font-weight: 600; padding-top: 20px; padding-bottom: 20px;">Name</th>
+                <th style="text-align:left; font-weight: 600; padding-top: 20px; padding-bottom: 20px;">Occupation</th>
+                @*<th style="text-align:left; font-weight: 600; padding-top: 20px; padding-bottom: 20px;">Capability</th>*@
+                <th style="text-align:left; font-weight: 600; padding-top: 20px; padding-bottom: 20px;">Email</th>
                 <th style="text-align:center"></th>
                 @*<th>Delete</th>*@
             </tr>
@@ -40,28 +49,34 @@ else
             @foreach(var user in users)
             {
                 <tr>
-                    <td class="col-lg-2" style="text-align:center; width:50%">
-                        @user.UserName
+                    <td class="col-lg-3" style="text-align:left; font-family: 'Gilroy'; 
+                        font-weight: 500; padding-top: 20px; padding-bottom: 20px;">
+                        <a style="color: #6C60FF; text-decoration: none; font-weight: 600;" 
+                            href = "">@user.UserName</a>
                     </td>
-                    <td class="col-lg-2 pr-3" style="text-align:center">
+                    <td class="col-lg-3 pr-3" style="text-align:left; font-family: 'Gilroy'; 
+                        font-weight: 500; padding-top: 20px; padding-bottom: 20px;">
                         @user.UserOccupation
                     </td>
-                    <td class="col-lg-3" style="text-align:center">
+                    @*<td class="col-lg-5" style="text-align:left; font-family: 'Gilroy'; 
+                        font-weight: 500; padding-top: 20px; padding-bottom: 20px;">
                         @user.UserCapacity
-                    </td>
-                    <td class="col-lg-2" style="text-align:center">                         
+                    </td>*@
+                    <td class="col-lg-2" style="text-align:left; font-family: 'Gilroy'; 
+                        font-weight: 500; padding-top: 20px; padding-bottom: 20px;">                         
                         @user.UserEmail
                     </td>
-                    <td class="col-lg-3" style="text-align:center">
-                        <button class="btn btn-success" @onclick="@(() => UpdateUser(user.UserName))">Update</button>
-                        <button class="btn btn-danger" @onclick="@(() => DeleteUser(user.UserName))">Delete</button>
+                    <td class="col-lg-3" style="text-align:center; 
+                        padding-top: 20px; padding-bottom: 20px;">
+                        <button class="btn update-btn" @onclick="@(() => UpdateUser(user.UserName))"><p>Update</p></button>
+                        <button class="btn delete-btn" @onclick="@(() => DeleteUser(user.UserName))"><p>Delete</p></button>
                     </td>
                 </tr>   
             }
         </tbody>
     </table>
 
-    <a class="btn btn-success mt-3" href="/users/create">Add User</a>
+    @*<a class="btn btn-success mt-3" href="/users/create">Add User</a>*@
 }
 
 @code {

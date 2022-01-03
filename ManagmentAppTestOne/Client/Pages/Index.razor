@@ -2,14 +2,25 @@
 
 @page "/"
 
+
 <AuthorizeView>
     <NotAuthorized>
         <h1>Hello, Stranger!</h1>
     </NotAuthorized>
     <Authorized>
-        <h1>Hello, @LocalStorage.GetItemAsString("username")!</h1>
+        <h1>Hello Owner, @LocalStorage.GetItemAsString("username")!</h1>
     </Authorized>
 </AuthorizeView>
+
+@if (LocalStorage.GetItemAsString("role") == "owner")
+{
+    <text>Owner</text>
+}
+else
+{
+    <text>Employee</text>    
+}
+<br>
 
 
 Welcome to your new app.

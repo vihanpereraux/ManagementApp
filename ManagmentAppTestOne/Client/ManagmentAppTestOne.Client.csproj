@@ -19,6 +19,7 @@
   <ItemGroup>
     <Folder Include="wwwroot\img\Authentication\" />
     <Folder Include="wwwroot\fonts\" />
+    <Folder Include="wwwroot\img\Company\" />
   </ItemGroup>
 
 </Project>

@@ -23,12 +23,17 @@ namespace ManagmentAppTestOne.Client
             var state = new AuthenticationState(new ClaimsPrincipal());
 
             string username = await _localStorage.GetItemAsStringAsync("username");
+            string userRole = await _localStorage.GetItemAsStringAsync("role");
+
             if (!string.IsNullOrEmpty(username)) 
             {
                 var identity = new ClaimsIdentity(new[]
                 {
-                    new Claim(ClaimTypes.Name, username)
+                    new Claim(ClaimTypes.Name, username),
+                    new Claim(ClaimTypes.Role, userRole)
                 }, "test authentication type");
+
+
 
                 state = new AuthenticationState(new ClaimsPrincipal(identity));
             }

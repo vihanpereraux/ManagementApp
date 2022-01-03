@@ -6,11 +6,20 @@
 @*For redirecting purposes*@
 @inject NavigationManager Navigation
 
-<h3>Update Company</h3>
+<div class="container my-auto">
+    <div class="row">
 
-<CompanyForm buttonText = "Update Company" company = "@company" OnValidSubmit = "@UpdateCompanyByName">
+        <div class="col-12 col-sm-12 col-md-6 col-lg-6 my-auto">
+            <img class="add-company-img mx-auto d-block align-self-center" src="img/Company/Add Company Image.png">
+        </div>
 
-</CompanyForm>
+        <div class="col-12 col-sm-12 col-md-6 col-lg-6 my-auto">
+            <CompanyForm buttonText = "Update Company" company = "@company" OnValidSubmit = "@UpdateCompanyByName"></CompanyForm>
+        </div>
+
+
+    </div>
+</div>
 
 
 @code {

@@ -4,31 +4,37 @@
 <EditForm Model="@company" OnValidSubmit="@OnValidSubmit">
     <DataAnnotationsValidator></DataAnnotationsValidator>
 
+    <h4 id="add-company-text">Manage <br> Your Companies</h4>
+
     <div class="form-group">
-        <label class="control-label">Company Name</label>
-        <InputText @bind-Value="company.CompanyName"></InputText>
+        <label id="label-text" for="InputComapnyName">Company Name</label>
+        <InputText @bind-Value="company.CompanyName" class="form-control"
+            aria-describedby="emailHelp" placeholder="Enter company name"></InputText>
         <ValidationMessage For="@(() => company.CompanyName)" />
     </div>
 
     <div class="form-group">
-        <label class="control-label">Company Type</label>
-        <InputText @bind-Value="company.CompanyDescription"></InputText>
+        <label id="label-text" for="InputComapnyType">Company Type</label>
+        <InputTextArea @bind-Value="company.CompanyDescription" class="form-control"
+            aria-describedby="emailHelp" placeholder="Enter company type"></InputTextArea>
         <ValidationMessage For="@(() => company.CompanyDescription)" />
     </div>
 
     <div class="form-group">
-        <label class="control-label">Established Date</label>
-        <InputDate  @bind-Value="company.EstablishedDate"></InputDate>
+        <label id="label-text" for="InputComapnyDate">Established Date</label>
+        <InputDate  @bind-Value="company.EstablishedDate" class="form-control"
+            aria-describedby="emailHelp" placeholder="Enter started date"></InputDate>
         <ValidationMessage For="@(() => company.EstablishedDate)" />
     </div>
 
     <div class="form-group">
-        <label class="control-label">Number of Employees</label>
-        <InputNumber  @bind-Value="company.NumOfEmployees"></InputNumber>
+        <label id="label-text" for="InputComapnyEmployeeNum">Number of Employees</label>
+        <InputNumber  @bind-Value="company.NumOfEmployees" class="form-control"
+            aria-describedby="emailHelp" placeholder="Enter number of employees"></InputNumber>
         <ValidationMessage For="@(() => company.NumOfEmployees)" />
     </div>
 
-    <button type="submit" class="btn btn-success">@buttonText</button>
+    <button type="submit" class="btn company-btn">@buttonText</button>
 
 </EditForm>
 

@@ -8,47 +8,53 @@
 <EditForm Model="@user" OnValidSubmit="@OnValidSubmit">
     <DataAnnotationsValidator></DataAnnotationsValidator>
 
+    <h4 id="add-company-text">Manage <br> Your Employees</h4>
+
     <div class="form-group">
-        <label class="control-label">Name</label>
-        <InputText @bind-Value="user.UserName"></InputText>
+        <label id="label-text" for="InputUserName">Name</label>
+        <InputText @bind-Value="user.UserName" class="form-control"
+            aria-describedby="emailHelp" placeholder="Enter employee name"></InputText>
         <ValidationMessage For="@(() => user.UserName)" />
     </div>
 
     <div class="form-group">
-        <label class="control-label">Occupation</label>
-        <InputText @bind-Value="user.UserOccupation"></InputText>
+        <label id="label-text" for="InputUserOccupation">Occupation</label>
+        <InputText @bind-Value="user.UserOccupation" class="form-control"
+            aria-describedby="emailHelp" placeholder="Enter employee occupation"></InputText>
         <ValidationMessage For="@(() => user.UserOccupation)" />
     </div>
 
     <div class="form-group">
-        <label class="control-label">Capability</label>
-        <InputText @bind-Value="user.UserCapacity"></InputText>
+        <label id="label-text" for="InputUserCapability">Capability</label>
+        <InputTextArea @bind-Value="user.UserCapacity" class="form-control"
+            aria-describedby="emailHelp" placeholder="Enter employee capabilities"></InputTextArea>
         <ValidationMessage For="@(() => user.UserCapacity)" />
     </div>
 
     <div class="form-group">
-        <label class="control-label">Email</label>
-        <InputText @bind-Value="user.UserEmail"></InputText>
+        <label id="label-text" for="InputUserEmail">Email</label>
+        <InputText @bind-Value="user.UserEmail" class="form-control"
+            aria-describedby="emailHelp" placeholder="Enter employee mail"></InputText>
         <ValidationMessage For="@(() => user.UserEmail)" />
     </div>
 
     <div class="form-group">
-        <label class="control-label">Password</label>
-        <InputText @bind-Value="user.UserPassword"></InputText>
+        <label id="label-text" for="InputUserPassword">Password</label>
+        <InputText @bind-Value="user.UserPassword" class="form-control"
+            aria-describedby="emailHelp" placeholder="Enter employee password"></InputText>
         <ValidationMessage For="@(() => user.UserPassword)" />
     </div>
 
     <div class="form-group">
-        <label class="control-label">System Role</label>
-        <div class = "col-sm-12">
-            <InputSelect @bind-Value="user.UserRole">
-                <option value="Owner">Owner</option>  
-                <option value="Employee">Employee</option>  
+        <label id="label-text" for="InputUserRole">System Role</label>
+            <InputSelect @bind-Value="user.UserRole" class="form-control"
+                aria-describedby="emailHelp" placeholder="Enter employee role">
+                <option style="font-weight: 600;" value="Owner">Owner</option>  
+                <option style="font-weight: 600;" value="Employee">Employee</option>  
             </InputSelect>
-        </div>
     </div>
 
-    <button type="submit" class="btn btn-success">@buttonText</button>
+    <button type="submit" class="btn company-btn">@buttonText</button>
 </EditForm>
 
 @code {

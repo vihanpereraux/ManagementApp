@@ -18,25 +18,49 @@ else if (users.Length == 0)
 }
 else
 {
-    <h3 class="mb-5">Add Collaboration</h3>
+    <div class="container assign-user-section my-auto">
+        <div class="row">
 
-    <EditForm Model="@collaboration" OnValidSubmit="@CreateCollaboration">
-        <DataAnnotationsValidator></DataAnnotationsValidator>
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 my-auto">
+                <img class="assign-user-img mx-auto d-block align-self-center" src="img/Collaboration/Manage Collab Image.png">
+            </div>
 
-        <div class="form-group">
-             <label class="control-label">Assign a User</label>
-             <div class = "col-sm-12">
-                <InputSelect @bind-Value="collaboration.UserId">
-                    @foreach(var user in users)
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 my-auto">
+
+                <EditForm Model="@collaboration" OnValidSubmit="@CreateCollaboration">
+                    <DataAnnotationsValidator></DataAnnotationsValidator>
+
+                    @if ( projects != null )
                     {
-                        <option value="@user.UserId">@user.UserName</option>    
+                        @foreach (var item in projects)
+                        {
+                            if( item.ProjectId == projectId)
+                            {
+                                <h4 id="assign-user-text">Assign an Employee <br> For  
+                                    <a style="color: #6C60FF; text-decoration: none; font-weight: 600;" 
+                                    href=""> 
+                                    @item.ProjectName </a> 
+                                </h4>
+                            }
+                        }
                     }
-               </InputSelect>
-             </div>
-         </div>
+                    
+                    <div class="form-group">
+                         <label id="label-text" for="InputAssignedUser">Assign an Employee</label>
+                            <InputSelect @bind-Value="collaboration.UserId" class="form-control"
+                                aria-describedby="emailHelp" placeholder="Select a user">
+                                @foreach(var user in users)
+                                {
+                                    <option style="font-weight: 600;" value="@user.UserId">@user.UserName</option>
+                                }
+                            </InputSelect>
+                     </div>
+                    <button type="submit" class="btn ticket-btn">Assign User</button>
+                </EditForm>
+            </div>
 
-        <button type="submit" class="btn btn-success">Assign User</button>
-    </EditForm>
+        </div>
+    </div>
 }
 
 
@@ -45,12 +69,14 @@ else
     CollaborationEntity collaboration = new CollaborationEntity();
 
     UserEntity[] users { get; set; }
+    ProjectEntity[] projects { get; set; }
 
     [Parameter] public Guid projectId { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         users = await http.GetFromJsonAsync<UserEntity[]>("api/user");
+        projects = await http.GetFromJsonAsync<ProjectEntity[]>("api/project");
     }
 
     async Task CreateCollaboration()

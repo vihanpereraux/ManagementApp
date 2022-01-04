@@ -12,7 +12,7 @@
     }, {
         "category": "Completed ",
         "litres": state / total * 100,
-        "color": "#d9ccfc"
+        "color": "#75F536"
     }
     ];
 

@@ -1,11 +1,25 @@
 ﻿@page "/projects/projectform"
 
+@*Getting HttpClient class*@
+@inject HttpClient http
+
 
 <EditForm Model="@project" OnValidSubmit="@OnValidSubmit">
     <DataAnnotationsValidator></DataAnnotationsValidator>
 
-    <h4 id="login-text">Manage <br> Company Projects</h4>
-
+    @if ( companies != null )
+    {
+        @foreach (var item in companies)
+        {
+            if( companyId == item.CompanyId)
+            {
+                <h4 id="project-text">Latest Project <br> For
+                    <span style="color: #6C60FF; font-weight: 600;"> @item.CompanyName </span>
+                </h4>
+            }
+        }    
+    }
+    
     <div class="form-group">
         <label id="label-text" for="InputUserName">Project Name</label>
         <InputText @bind-Value="project.ProjectName" class="form-control"
@@ -15,8 +29,8 @@
 
     <div class="form-group">
         <label id="label-text" for="InputUserName">Project Details</label>
-        <InputText @bind-Value="project.ProjectDescription" class="form-control"
-            aria-describedby="emailHelp" placeholder="Enter project description"></InputText>
+        <InputTextArea @bind-Value="project.ProjectDescription" class="form-control"
+            aria-describedby="emailHelp" placeholder="Enter project description"></InputTextArea>
         <ValidationMessage For="@(() => project.ProjectDescription)" />
     </div>
 
@@ -29,17 +43,33 @@
 
     <div class="form-group">
         <label id="label-text" for="InputUserName">Project Status</label>
-        <InputText  @bind-Value="project.ProjectStatus" class="form-control"
-            aria-describedby="emailHelp" placeholder="Enter project status"></InputText>
+        <InputSelect @bind-Value="project.ProjectStatus" class="form-control"
+            aria-describedby="emailHelp" placeholder="Enter project status">
+            <option style="font-weight: 600;" value="Ongoing">Ongoing</option> 
+            <option style="font-weight: 600;" value="Completed">Completed</option>
+            <option style="font-weight: 600;" value="Successful">Successful</option>
+        </InputSelect>
         <ValidationMessage For="@(() => project.ProjectStatus)" />
     </div>
 
-    <button type="submit" class="btn btn-success">@buttonText</button>
+    <button type="submit" class="btn company-btn">@buttonText</button>
 
 </EditForm>
 
 @code {
+
     [Parameter] public ProjectEntity project { get; set; }
     [Parameter] public string buttonText { get; set; } = "Save Project";
     [Parameter] public EventCallback OnValidSubmit { get; set; }
+    [Parameter] public Guid companyId { get; set; }
+
+
+    CompanyEntity[] companies { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        companies = await http.GetFromJsonAsync<CompanyEntity[]>("api/company");     
+    }
+
 }

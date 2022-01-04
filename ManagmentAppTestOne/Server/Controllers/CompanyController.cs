@@ -37,15 +37,31 @@ namespace ManagmentAppTestOne.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<CompanyEntity>> Post(CompanyEntity company)
         {
-            await _companyModel.Post(company);
-            return new CreatedAtRouteResult("GetCompany", new { companyName = company.CompanyName }, company);
+            var result = await _companyModel.Post(company);
+            if(result != null)
+            {
+                return Ok(new CreatedAtRouteResult("GetCompany", new { companyName = company.CompanyName }, company));
+            }
+            else
+            {
+                return BadRequest();
+            }
+            //return new CreatedAtRouteResult("GetCompany", new { companyName = company.CompanyName }, company);
         }
 
         [HttpPut]
         public async Task<ActionResult> Put(CompanyEntity company)
         {
-            await _companyModel.Put(company);
-            return new CreatedAtRouteResult("GetCompany", new { companyName = company.CompanyName }, company);
+            var result = await _companyModel.Put(company);
+            if( result != null) 
+            {
+                return Ok(new CreatedAtRouteResult("GetCompany", new { companyName = company.CompanyName }, company));
+            }
+            else
+            {
+                return BadRequest();
+            }
+            /*return new CreatedAtRouteResult("GetCompany", new { companyName = company.CompanyName }, company);*/
         }
 
         [HttpDelete("{companyName}")]

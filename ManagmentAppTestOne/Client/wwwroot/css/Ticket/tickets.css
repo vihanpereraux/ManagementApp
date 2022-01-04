@@ -1,0 +1,33 @@
+﻿.manage-ticket-img {
+    width: 75%;
+}
+
+.tickets-heading {
+    font-family: 'Gilroy';
+    font-weight: 600;
+    margin-top: 80px;
+    line-height: 1.5;
+}
+
+#ticket-text {
+    line-height: 1.4;
+    font-family: 'Gilroy';
+    font-weight: 600;
+    font-size: 30px;
+    margin-bottom: 30px;
+    padding-top: 30px;
+}
+
+.ticket-btn {
+    width: 70%;
+    height: 50px;
+    border-radius: 8px;
+    background-color: #8676FF;
+    color: white;
+    font-family: 'Gilroy';
+    font-weight: 600;
+    margin-top: 25px;
+}
+.ticket-btn:hover{
+    color: white;
+}

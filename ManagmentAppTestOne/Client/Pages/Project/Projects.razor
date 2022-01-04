@@ -1,5 +1,5 @@
 ﻿@*Route*@
-@page "/projects/{companyId:guid}"
+@page "/projects/{companyId:guid}/{companyName}"
 
 @*Getting HttpClient class*@
 @inject HttpClient http
@@ -29,7 +29,7 @@ else
     <div class="container">
         <div class="row">
             <div class="col-lg-6 my-auto">
-                <h3 class="company-heading">Discover <br> Your Project Stats</h3>
+                <h3 class="company-heading">Discover <br> <span style="color: #8676FF">@companyName</span> Projects </h3>
             </div>
             <div class="col-lg-6 my-auto">
                 <a class="btn add-company-btn" href="/projects/create/@companyId"><p>Add Project</p></a>
@@ -65,7 +65,7 @@ else
                     </td>
                     <td class="col-lg-2" style="text-align:center; 
                         padding-top: 20px; padding-bottom: 20px;">
-                        <button class="btn update-btn" href="/projects/edit/@project.ProjectName" @onclick="@(() => UpdateProject(project.ProjectName))"><p>Update</p></button>
+                        <button class="btn update-btn" href="/projects/edit/@project.ProjectName/@companyName/@companyId" @onclick="@(() => UpdateProject(project.ProjectName))"><p>Update</p></button>
                         <button class="btn delete-btn" @onclick="@(() => DeleteProject(project.ProjectName))"><p>Delete</p></button>
                     </td>
                 </tr>   
@@ -79,13 +79,19 @@ else
 
     [Parameter] public Guid companyId { get; set; }
 
+    [Parameter] public string companyName { get; set; }
+
     ArrayList arlist = new ArrayList(); 
+
     ArrayList updatedArlist = new ArrayList();
 
     // An object array of company objects - CompanyModel
     ProjectEntity[] projects { get; set; }
+
     TicketEntity[] tickets { get; set; }
+
     UserEntity[] users { get; set; }
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -105,14 +111,13 @@ else
         projects = await http.GetFromJsonAsync<ProjectEntity[]>($"api/project/{companyId}");
         tickets = await http.GetFromJsonAsync<TicketEntity[]>("api/ticket");
         users = await http.GetFromJsonAsync<UserEntity[]>("api/user");
-        //await UserValidation();
     }
 
     async Task UpdateProject(string projectName)
     {
         if(await js.InvokeAsync<bool>("confirm", "Are you sure you want to edit ?"))
         {
-            Navigation.NavigateTo($"/projects/edit/{projectName}");
+            Navigation.NavigateTo($"/projects/edit/{projectName}/{companyName}/{companyId}");
             await LoadProjects();
         } 
     }

@@ -12,7 +12,7 @@
     }, {
         "category": "Successful",
         "litres": state / total * 100,
-        "color": "#d9ccfc"
+        "color": "#8676FF"
     }
     ];
 

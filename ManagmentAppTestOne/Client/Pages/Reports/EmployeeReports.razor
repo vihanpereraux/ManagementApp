@@ -12,7 +12,7 @@
 
 @inject ISyncLocalStorageService LocalStorage
 
-<h3>Reports</h3>
+
 
 @if (users == null)
 {
@@ -24,52 +24,68 @@ else if (users.Length == 0)
 }
 else
 {
-    <EditForm Model="@selectedUser" OnValidSubmit="@LoadTickets">
-        <DataAnnotationsValidator></DataAnnotationsValidator>
-        <div class="form-group">
-             <label class="control-label">Allocated User</label>
-             <div class = "col-sm-12">
-                <InputSelect @bind-Value="selectedUser.UserId">
-                    @foreach(var user in users)
-                    {
-                        <option value="@user.UserId">@user.UserName</option>    
-                    }
-               </InputSelect>
-               <ValidationMessage For="@(() => selectedUser.UserId)" />
-             </div>
-         </div>
-        <button type="submit" class="btn btn-success">Get Stuff</button>
-    </EditForm>
-}
 
-<div class="mt-5"></div>
+    <div class="container report-section">
+        <div class="row">
+
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 my-auto">
+                <img class="report-img mx-auto d-block align-self-center" src="img/Report/Report Image.png">
+            </div>
+
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 my-auto">
+                    
+                <EditForm Model="@selectedUser" OnValidSubmit="@LoadTickets">
+                    <DataAnnotationsValidator></DataAnnotationsValidator>
+                        
+                        <h4 id="generate-report-text">Generate <br> Progress Reports</h4>
+
+                        <div class="form-group">
+                             <label id="label-text" for="InputComapnyName">Select a user</label>
+                                <InputSelect @bind-Value="selectedUser.UserId" class="form-control"
+                                    aria-describedby="emailHelp" placeholder="Enter company name">
+                                    @foreach(var user in users)
+                                    {
+                                        <option style="font-weight: 600;" value="@user.UserId">@user.UserName</option>    
+                                    }
+                                </InputSelect>
+                                <ValidationMessage For="@(() => selectedUser.UserId)" />
+                         </div>
+                    <button type="submit" class="btn report-generate-btn">Generate Progress Report</button>
+                </EditForm>
+
+            </div>
+        </div>
+    </div>
+}
 
 
 @if (tickets != null && projects != null)
 {
+
     foreach (var user in users)
     {
         if(selectedUser.UserId == user.UserId)
         {
-            <h5>Ongoing Tasks of @user.UserName</h5>
+            <h5 class="report-table-headings">Completed Tasks of @user.UserName</h5>
         }
     }
-    <table class="table table-striped">
-        <thead class="table-dark">
+    <table class="table">
+        <thead class="table-header">
             <tr>
-                <th style="text-align:center">Project</th>
-                <th style="text-align:center">Task</th>
-                <th style="text-align:center">Task Details</th>
-                <th style="text-align:center">Task State</th>
+                <th style="text-align:left; font-weight: 600; padding-top: 20px; padding-bottom: 20px;">Project</th>
+                <th style="text-align:left; font-weight: 600; padding-top: 20px; padding-bottom: 20px;">Task</th>
+                <th style="text-align:left; font-weight: 600; padding-top: 20px; padding-bottom: 20px;">Task Details</th>
+                <th style="text-align:left; font-weight: 600; padding-top: 20px; padding-bottom: 20px;">Task State</th>
             </tr>
         </thead>
         <tbody>
             @foreach(var ticket in tickets)
             {
-                @if (ticket.TicketState == "Ongoing")
+                @if (ticket.TicketState == "Completed")
                 {
                     <tr>
-                        <td class="col-lg-3" style="text-align:center">
+                        <td class="col-lg-2" style="text-align:left; font-family: 'Gilroy'; 
+                            font-weight: 500; padding-top: 20px; padding-bottom: 20px;">
                             @foreach (var project in projects)
                             {
                                 if(ticket.ProjectId == project.ProjectId)
@@ -80,13 +96,171 @@ else
                                 }
                             }
                         </td>
-                        <td class="col-lg-3" style="text-align:center">
+
+                        <td class="col-lg-3" style="text-align:left; font-family: 'Gilroy'; 
+                            font-weight: 500; padding-top: 20px; padding-bottom: 20px; font-size: 15px; line-height:2.0">
                             @ticket.TicketTitle
                         </td>
-                        <td class="col-lg-3" style="text-align:center">
+
+                        <td class="col-lg-5" style="text-align:left; font-family: 'Gilroy'; 
+                            font-weight: 500; padding-top: 20px; padding-bottom: 20px; font-size: 15px; line-height:2.0">
                             @ticket.TicketDescription
                         </td>
-                        <td class="col-lg-3" style="text-align:center">
+
+                        <td class="col-lg-2" style="text-align:left; font-family: 'Gilroy'; 
+                            font-weight: 500; padding-top: 20px; padding-bottom: 20px;">
+                            @ticket.TicketState   
+                        </td>
+                    </tr>
+                } 
+            }
+        </tbody>
+    </table>
+
+    @*<a class="btn btn-success" @onclick="GetCompletedChart" >Chart2</a>*@
+    <div class="container chart-section">
+        <div class="row">
+
+            <div class="col-lg-6 my-auto">
+                <div style="width:500px; height:200px;" 
+                    id="chartdiv2" class="mx-auto d-block"></div>
+            </div>
+
+            <div class="col-lg-6 my-auto">
+                <p class="mx-auto d-block">
+                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
+                    when an unknown printer took a galley of type and scrambled it to make a type 
+                    specimen book. It has survived not only five centuries, but also the leap into 
+                    electronic typesetting, remaining essentially unchanged.
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+
+    foreach (var user in users)
+    {
+        if(selectedUser.UserId == user.UserId)
+        {
+            <h5 class="report-table-headings">Successful Tasks of @user.UserName</h5>
+        }
+    }
+    <table class="table">
+        <thead class="table-header">
+            <tr>
+                <th style="text-align:left; font-weight: 600; padding-top: 20px; padding-bottom: 20px;">Project</th>
+                <th style="text-align:left; font-weight: 600; padding-top: 20px; padding-bottom: 20px;">Task</th>
+                <th style="text-align:left; font-weight: 600; padding-top: 20px; padding-bottom: 20px;">Task Details</th>
+                <th style="text-align:left; font-weight: 600; padding-top: 20px; padding-bottom: 20px;">Task State</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var ticket in tickets)
+            {
+                @if (ticket.TicketState == "Successful")
+                {
+                    <tr>
+                        <td class="col-lg-2" style="text-align:left; font-family: 'Gilroy'; 
+                            font-weight: 500; padding-top: 20px; padding-bottom: 20px;">
+                            @foreach (var project in projects)
+                            {
+                                if(ticket.ProjectId == project.ProjectId)
+                                {
+                                    <a class="text-decoration-none" href="/tickets/@project.ProjectId">
+                                        <p>@project.ProjectName</p>
+                                    </a>
+                                }
+                            }
+                        </td>
+
+                        <td class="col-lg-3" style="text-align:left; font-family: 'Gilroy'; 
+                            font-weight: 500; padding-top: 20px; padding-bottom: 20px; font-size: 15px; line-height:2.0">
+                            @ticket.TicketTitle
+                        </td>
+
+                        <td class="col-lg-5" style="text-align:left; font-family: 'Gilroy'; 
+                            font-weight: 500; padding-top: 20px; padding-bottom: 20px; font-size: 15px; line-height:2.0">
+                            @ticket.TicketDescription
+                        </td>
+
+                        <td class="col-lg-2" style="text-align:left; font-family: 'Gilroy'; 
+                            font-weight: 500; padding-top: 20px; padding-bottom: 20px;">
+                            @ticket.TicketState   
+                        </td>
+                    </tr>
+                } 
+            }
+        </tbody>
+    </table>
+
+    <div class="container chart-section">
+        <div class="row">
+
+            <div class="col-lg-6 my-auto">
+                <div style="width:500px; height:200px;" 
+                    id="chartdiv3" class="mx-auto d-block"></div>
+            </div>
+
+            <div class="col-lg-6 my-auto">
+                <p class="mx-auto d-block">
+                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
+                    when an unknown printer took a galley of type and scrambled it to make a type 
+                    specimen book. It has survived not only five centuries, but also the leap into 
+                    electronic typesetting, remaining essentially unchanged.
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+    foreach (var user in users)
+    {
+        if(selectedUser.UserId == user.UserId)
+        {
+            <h5 class="report-table-headings">Ongoing Tasks of @user.UserName</h5>
+        }
+    }
+    <table class="table">
+        <thead class="table-header">
+            <tr>
+                <th style="text-align:left; font-weight: 600; padding-top: 20px; padding-bottom: 20px;">Project</th>
+                <th style="text-align:left; font-weight: 600; padding-top: 20px; padding-bottom: 20px;">Task</th>
+                <th style="text-align:left; font-weight: 600; padding-top: 20px; padding-bottom: 20px;">Task Details</th>
+                <th style="text-align:left; font-weight: 600; padding-top: 20px; padding-bottom: 20px;">Task State</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var ticket in tickets)
+            {
+                @if (ticket.TicketState == "Ongoing")
+                {
+                    <tr>
+                        <td class="col-lg-2" style="text-align:left; font-family: 'Gilroy'; 
+                            font-weight: 500; padding-top: 20px; padding-bottom: 20px;">
+                            @foreach (var project in projects)
+                            {
+                                if(ticket.ProjectId == project.ProjectId)
+                                {
+                                    <a class="text-decoration-none" href="/tickets/@project.ProjectId">
+                                        <p>@project.ProjectName</p>
+                                    </a>
+                                }
+                            }
+                        </td>
+
+                        <td class="col-lg-3" style="text-align:left; font-family: 'Gilroy'; 
+                            font-weight: 500; padding-top: 20px; padding-bottom: 20px; font-size: 15px; line-height:2.0">
+                            @ticket.TicketTitle
+                        </td>
+
+                        <td class="col-lg-5" style="text-align:left; font-family: 'Gilroy'; 
+                            font-weight: 500; padding-top: 20px; padding-bottom: 20px; font-size: 15px; line-height:2.0">
+                            @ticket.TicketDescription
+                        </td>
+
+                        <td class="col-lg-2" style="text-align:left; font-family: 'Gilroy'; 
+                            font-weight: 500; padding-top: 20px; padding-bottom: 20px;">
                             @ticket.TicketState   
                         </td>
                     </tr>
@@ -97,162 +271,15 @@ else
 
 
     @*<a class="btn btn-success" @onclick="GetChart" >Chart</a>*@
-    <div class="container">
+    <div class="container chart-section">
         <div class="row">
-            <div class="col-lg-6">
-                <div style=
-                    "
-                        width:100%;
-                        height:200px;
-                    " 
-                id="chartdiv" class="mx-auto d-block"></div>
+
+            <div class="col-lg-6 my-auto">
+                <div style="width:100%; height:200px;" 
+                    id="chartdiv" class="mx-auto d-block"></div>
             </div>
-            <div class="col-lg-6">
-                <p class="mx-auto d-block">
-                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-                    when an unknown printer took a galley of type and scrambled it to make a type 
-                    specimen book. It has survived not only five centuries, but also the leap into 
-                    electronic typesetting, remaining essentially unchanged.
-                </p>
-            </div>
-        </div>
-    </div>
 
-
-    <div class="mt-5"></div>
-
-    foreach (var user in users)
-    {
-        if(selectedUser.UserId == user.UserId)
-        {
-            <h5>Completed Tasks of @user.UserName</h5>
-        }
-    }
-    <table class="table table-striped">
-        <thead class="table-dark">
-            <tr>
-                <th style="text-align:center">Project</th>
-                <th style="text-align:center">Task</th>
-                <th style="text-align:center">Task Details</th>
-                <th style="text-align:center">Task State</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach(var ticket in tickets)
-            {
-                @if (ticket.TicketState == "Completed")
-                {
-                    <tr>
-                        <td class="col-lg-3" style="text-align:center">
-                            @foreach (var project in projects)
-                            {
-                                if(ticket.ProjectId == project.ProjectId)
-                                {
-                                    <a class="text-decoration-none" href="/tickets/@project.ProjectId">
-                                        <p>@project.ProjectName</p>
-                                    </a>
-                                }
-                            }
-                        </td>
-                        <td class="col-lg-3" style="text-align:center">
-                            @ticket.TicketTitle
-                        </td>
-                        <td class="col-lg-3" style="text-align:center">
-                            @ticket.TicketDescription
-                        </td>
-                        <td class="col-lg-3" style="text-align:center">
-                            @ticket.TicketState   
-                        </td>
-                    </tr>
-                } 
-            }
-        </tbody>
-    </table>
-
-    @*<a class="btn btn-success" @onclick="GetCompletedChart" >Chart2</a>*@
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-7">
-                <div style=
-                    "
-                        width:500px;
-                        height:200px;
-                    " 
-                id="chartdiv2" class="mx-auto d-block"></div>
-            </div>
-            <div class="col-lg-5">
-                <p class="mx-auto d-block">
-                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-                    when an unknown printer took a galley of type and scrambled it to make a type 
-                    specimen book. It has survived not only five centuries, but also the leap into 
-                    electronic typesetting, remaining essentially unchanged.
-                </p>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="mt-5"></div>
-
-    foreach (var user in users)
-    {
-        if(selectedUser.UserId == user.UserId)
-        {
-            <h5>Successful Tasks of @user.UserName</h5>
-        }
-    }
-    <table class="table table-striped">
-        <thead class="table-dark">
-            <tr>
-                <th style="text-align:center">Project</th>
-                <th style="text-align:center">Task</th>
-                <th style="text-align:center">Task Details</th>
-                <th style="text-align:center">Task State</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach(var ticket in tickets)
-            {
-                @if (ticket.TicketState == "Successful")
-                {
-                    <tr>
-                        <td class="col-lg-3" style="text-align:center">
-                            @foreach (var project in projects)
-                            {
-                                if(ticket.ProjectId == project.ProjectId)
-                                {
-                                    <a class="text-decoration-none" href="/tickets/@project.ProjectId">
-                                        <p>@project.ProjectName</p>
-                                    </a>
-                                }
-                            }
-                        </td>
-                        <td class="col-lg-3" style="text-align:center">
-                            @ticket.TicketTitle
-                        </td>
-                        <td class="col-lg-3" style="text-align:center">
-                            @ticket.TicketDescription
-                        </td>
-                        <td class="col-lg-3" style="text-align:center">
-                            @ticket.TicketState   
-                        </td>
-                    </tr>
-                } 
-            }
-        </tbody>
-    </table>
-
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-7">
-                <div style=
-                    "
-                        width:500px;
-                        height:200px;
-                    " 
-                id="chartdiv3" class="mx-auto d-block"></div>
-            </div>
-            <div class="col-lg-5">
+            <div class="col-lg-6 my-auto">
                 <p class="mx-auto d-block">
                     Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
                     when an unknown printer took a galley of type and scrambled it to make a type 

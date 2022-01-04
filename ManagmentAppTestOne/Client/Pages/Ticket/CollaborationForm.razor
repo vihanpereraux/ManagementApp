@@ -17,47 +17,64 @@ else
     <EditForm Model="@ticket" OnValidSubmit="@OnValidSubmit">
         <DataAnnotationsValidator></DataAnnotationsValidator>
 
+        @if( projects != null)
+        {
+            @foreach (var item in projects)
+            {
+                if (projectId == item.ProjectId)
+                {
+                    <h4 id="ticket-text">Manage <br> 
+                        <span style="color: #8676FF; text-decoration: none; font-weight: 600;">
+                            @item.ProjectName</span> Tasks
+                    </h4>
+                }   
+            } 
+        }
+
         <div class="form-group">
-            <label class="control-label">Ticket Name</label>
-            <InputText @bind-Value="ticket.TicketTitle"></InputText >
+            <label id="label-text" for="InputTicketName">Ticket Name</label>
+            <InputText @bind-Value="ticket.TicketTitle" class="form-control"
+            aria-describedby="emailHelp" placeholder="Enter ticket name"></InputText >
             <ValidationMessage For="@(() => ticket.TicketTitle)" />
         </div>
 
         <div class="form-group">
-            <label class="control-label">Ticket Details</label>
-            <InputText @bind-Value="ticket.TicketDescription"></InputText>
+            <label id="label-text" for="InputTicketDetails">Ticket Details</label>
+            <InputTextArea @bind-Value="ticket.TicketDescription" class="form-control"
+            aria-describedby="emailHelp" placeholder="Enter ticket description"></InputTextArea>
             <ValidationMessage For="@(() => ticket.TicketDescription)" />
         </div>
 
         <div class="form-group">
-            <label class="control-label">Ticket Status</label>
-                <InputSelect @bind-Value="ticket.TicketState">
-                     <option value="Ongoing">Ongoing</option> 
-                     <option value="Completed">Completed</option>
-                     <option value="Successful">Successful</option>
+            <label id="label-text" for="InputTicketStatus">Ticket Status</label>
+                <InputSelect @bind-Value="ticket.TicketState" class="form-control"
+                    aria-describedby="emailHelp" placeholder="Enter ticket status">
+                     <option style="font-weight: 600;" value="Ongoing">Ongoing</option> 
+                     <option style="font-weight: 600;" value="Completed">Completed</option>
+                     <option style="font-weight: 600;" value="Successful">Successful</option>
                 </InputSelect>
             <ValidationMessage For="@(() => ticket.TicketState)" />
         </div>
 
         <div class="form-group">
-             <label class="control-label">Allocated User</label>
-             <div class = "col-sm-12">
-                <InputSelect @bind-Value="ticket.UserId">
+            <label id="label-text" for="InputTicketAllocatedUser">Allocated User</label>
+                <InputSelect @bind-Value="ticket.UserId" class="form-control"
+                    aria-describedby="emailHelp" placeholder="select allocated user">
                     @foreach(var user in users)
                     {
-                        <option value="@user.UserId">@user.UserName</option>    
+                        <option style="font-weight: 600;" value="@user.UserId">@user.UserName</option>    
                     }
                </InputSelect>
-             </div>
          </div>
 
         <div class="form-group">
-            <label class="control-label">Started Date</label>
-            <InputDate  @bind-Value="ticket.TicketStartedDate"></InputDate>
+            <label id="label-text" for="InputTicketInitializedDate">Started Date</label>
+            <InputDate  @bind-Value="ticket.TicketStartedDate" class="form-control"
+            aria-describedby="emailHelp" placeholder="Enter ticket initialized date"></InputDate>
             <ValidationMessage For="@(() => ticket.TicketStartedDate)" />
         </div>
 
-        <button type="submit" class="btn btn-success">@buttonText</button>
+        <button type="submit" class="btn ticket-btn">@buttonText</button>
     </EditForm>
 }
 
@@ -70,6 +87,8 @@ else
 
     UserEntity[] users { get; set; }
 
+    ProjectEntity[] projects { get; set; }
+
     //[Parameter] public Guid projectId { get; set; }
 
     CollaborationEntity[] collaborations { get; set; }
@@ -77,12 +96,18 @@ else
     protected override async Task OnInitializedAsync()
     {
         await LoadUsers();
+        await LoadProjects();
     }
 
     async Task LoadUsers()
     {
         users = await http.GetFromJsonAsync<UserEntity[]>($"api/collaboration/{projectId}");
         //collaborations = await http.GetFromJsonAsync<CollaborationEntity[]>("api/collaboration/{}");
+    }
+
+    async Task LoadProjects()
+    {
+        projects = await http.GetFromJsonAsync<ProjectEntity[]>($"api/project");
     }
 
 }

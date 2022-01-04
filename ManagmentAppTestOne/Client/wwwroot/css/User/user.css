@@ -1,0 +1,16 @@
+﻿.assign-user-section{
+    padding-top: 20vh;
+}
+
+.assign-user-img {
+    width: 75%
+}
+
+#assign-user-text {
+    line-height: 1.4;
+    font-family: 'Gilroy';
+    font-weight: 600;
+    font-size: 30px;
+    margin-bottom: 40px;
+    padding-top: 30px;
+}

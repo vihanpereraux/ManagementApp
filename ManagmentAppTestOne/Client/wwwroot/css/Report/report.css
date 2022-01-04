@@ -1,0 +1,41 @@
+﻿.report-section{
+    margin-top: 100px;
+}
+
+.report-img {
+    width: 55%;
+}
+
+#generate-report-text {
+    line-height: 1.4;
+    font-family: 'Gilroy';
+    font-weight: 600;
+    font-size: 30px;
+    margin-bottom: 40px;
+    padding-top: 30px;
+}
+
+.report-generate-btn {
+    width: 70%;
+    height: 50px;
+    border-radius: 8px;
+    background-color: #8676FF;
+    color: white;
+    font-family: 'Gilroy';
+    font-weight: 600;
+    margin-top: 25px;
+}
+.report-generate-btn:hover {
+    color: white;
+}
+
+.report-table-headings {
+    font-family: 'Gilroy';
+    font-weight: 600;
+    margin-top: 90px;
+}
+
+.chart-section{
+    margin-top: 60px;
+    margin-bottom: 100px;
+}

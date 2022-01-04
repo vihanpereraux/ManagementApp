@@ -23,7 +23,6 @@
 }
 .company-btn:hover{
     color: white;
-
 }
 
 
@@ -37,7 +36,7 @@
 
 .add-company-btn {
     float: right;
-    background-color: #6C60FF;
+    background-color: #8676FF;
     width: 30%;
     height: 45px;
     margin-top: 20px;
@@ -69,7 +68,7 @@ td {
 }
 
 .update-btn {
-    background-color: #6C60FF;
+    background-color: #8676FF;
     height: 40px;
 }
 .update-btn p{

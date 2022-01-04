@@ -8,15 +8,15 @@
 @inject NavigationManager Navigation
 
 
-<div class="container form-row my-auto">
+<div class="container my-auto">
         <div class="row">
 
             <div class="col-12 col-sm-12 col-md-6 col-lg-6 my-auto">
-                <img class="login-img mx-auto d-block align-self-center" src="img/Authentication/Login Image.png">
+                <img class="manage-project-img mx-auto d-block align-self-center" src="img/Project/Manage Project Image.png">
             </div>
 
             <div class="col-12 col-sm-12 col-md-6 col-lg-6 my-auto">
-                <ProjectForm buttonText = "Add Project" project = "@project" OnValidSubmit = "@CreateProject"></ProjectForm>
+                <ProjectForm buttonText = "Add project" companyId = "@companyId" project = "@project" OnValidSubmit = "@CreateProject"></ProjectForm>
             </div>
     </div>
 </div>
@@ -28,6 +28,7 @@
     [Parameter] public Guid companyId { get; set; }
 
     ProjectEntity project = new ProjectEntity();
+
 
     async Task CreateProject()
     {

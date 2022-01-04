@@ -4,8 +4,6 @@
 <EditForm Model="@company" OnValidSubmit="@OnValidSubmit">
     <DataAnnotationsValidator></DataAnnotationsValidator>
 
-    <h4 id="add-company-text">Manage <br> Your Companies</h4>
-
     <div class="form-group">
         <label id="label-text" for="InputComapnyName">Company Name</label>
         <InputText @bind-Value="company.CompanyName" class="form-control"

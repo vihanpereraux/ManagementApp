@@ -1,0 +1,26 @@
+﻿.manage-project-img {
+    width: 70%;
+}
+
+#project-text {
+    line-height: 1.4;
+    font-family: 'Gilroy';
+    font-weight: 600;
+    font-size: 30px;
+    margin-bottom: 30px;
+    padding-top: 30px;
+}
+
+.project-btn {
+    width: 70%;
+    height: 50px;
+    border-radius: 8px;
+    background-color: #8676FF;
+    color: white;
+    font-family: 'Gilroy';
+    font-weight: 600;
+    margin-top: 25px;
+}
+.project-btn:hover{
+    color: white;
+}

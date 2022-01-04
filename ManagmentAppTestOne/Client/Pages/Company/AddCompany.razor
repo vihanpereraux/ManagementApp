@@ -7,15 +7,21 @@
 @*For redirecting purposes*@
 @inject NavigationManager Navigation
 
+@*For JS confirmations*@
+@inject IJSRuntime js
+
+
+
 <div class="container my-auto">
     <div class="row">
 
         <div class="col-12 col-sm-12 col-md-6 col-lg-6 my-auto">
-            <img class="add-company-img mx-auto d-block align-self-center" src="img/Company/Add Company Image.png">
+            <img class="add-company-img mx-auto d-block align-self-center" src="img/Company/Manage Company Image.png">
         </div>
 
         <div class="col-12 col-sm-12 col-md-6 col-lg-6 my-auto">
-            <CompanyForm buttonText = "Add Company" company = "@company" OnValidSubmit = "@CreateCompany"></CompanyForm>
+            <h4 id="add-company-text">Create Your <br> Latest <span style="color: #8676FF;">Company</span></h4>
+            <CompanyForm buttonText = "Create company" company = "@company" OnValidSubmit = "@CreateCompany"></CompanyForm>
         </div>
 
     </div>
@@ -33,7 +39,16 @@
     {
         //valCompany = await http.GetFromJsonAsync<CompanyEntity>($"api/company/{company.CompanyName}");
 
-        await http.PostAsJsonAsync("api/company", company);
-        Navigation.NavigateTo("/companies");
+        var result = await http.PostAsJsonAsync("api/company", company);
+        if (result.IsSuccessStatusCode)
+        {
+            Navigation.NavigateTo("/companies");
+        }
+        else
+        {
+            await js.InvokeVoidAsync("alert", $"This project is already existing in the system");
+            Navigation.NavigateTo("/companies");
+        }
+        
     }
 }

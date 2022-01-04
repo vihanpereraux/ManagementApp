@@ -7,9 +7,23 @@
 @*For redirecting purposes*@
 @inject NavigationManager Navigation
 
-<h3 class="mb-5">Add Ticket</h3>
 
-@*@if (users == null)
+<div class="container my-auto">
+        <div class="row">
+
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 my-auto">
+                <img class="manage-ticket-img mx-auto d-block align-self-center" src="img/Ticket/Manage Ticket Image.png">
+            </div>
+
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 my-auto">
+                <CollaborationForm buttonText = "Add Ticket" projectId = "@projectId" ticket = "@ticket" OnValidSubmit = "@CreateTicket"></CollaborationForm>
+            </div>
+    </div>
+</div>
+
+
+
+@if (users == null)
 {
     <text>Loading..</text>
 }
@@ -19,105 +33,38 @@ else if (users.Length == 0)
 }
 else
 {
-    <CollaborationForm buttonText = "Add Ticket" projectId = "@projectId" ticket = "@ticket" OnValidSubmit = "@CreateTicket"></CollaborationForm>
-
-    <EditForm Model="@ticket" OnValidSubmit="@CreateTicket">
-        <DataAnnotationsValidator></DataAnnotationsValidator>
-
-        <div class="form-group">
-            <label class="control-label">Ticket Name</label>
-            <InputText @bind-Value="ticket.TicketTitle"></InputText>
-            <ValidationMessage For="@(() => ticket.TicketTitle)" />
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 my-auto">
+                <h3 class="tickets-heading">Already <br> Assigned Users</h3>
+            </div>
         </div>
+    </div>
 
-        <div class="form-group">
-            <label class="control-label">Ticket Details</label>
-            <InputText @bind-Value="ticket.TicketDescription"></InputText>
-            <ValidationMessage For="@(() => ticket.TicketDescription)" />
-        </div>
-
-        <div class="form-group">
-            <label class="control-label">Ticket Status</label>
-            <InputText  @bind-Value="ticket.TicketState"></InputText>
-            <ValidationMessage For="@(() => ticket.TicketState)" />
-        </div>
-
-        <div class="form-group">
-             <label class="control-label">Allocated User</label>
-             <div class = "col-sm-12">
-                <InputSelect @bind-Value="ticket.UserId">
-                    @foreach(var user in users)
-                    {
-                        <option value="@user.UserId">@user.UserName</option>    
-                    }
-               </InputSelect>
-             </div>
-         </div>
-
-        <button type="submit" class="btn btn-success">Save Ticket</button>
-    </EditForm>
-
-    <h3 class="mb-3 mt-4">Available Employees</h3>
-    <table class="table table-striped">
-        <thead class="table-dark">
+    <table class="table">
+        <thead class="table-header">
             <tr>
-                <th style="text-align:center">Name</th>
-                <th style="text-align:center">Occupation</th>
-                <th style="text-align:center">Capacity</th>
+                <th style="text-align:left; font-weight: 600; padding-top: 20px; padding-bottom: 20px;">Name</th>
+                <th style="text-align:left; font-weight: 600; padding-top: 20px; padding-bottom: 20px;">Occupation</th>
+                <th style="text-align:left; font-weight: 600; padding-top: 20px; padding-bottom: 20px;">Capacity</th>
             </tr>
         </thead>
         <tbody>
-            @foreach(var user in allUsers)
+            @foreach(var user in users)
             {
                 <tr>
-                    <td class="col-lg-4" style="text-align:center; width:50%">
-                        @user.UserName
+                    <td class="col-lg-3" style="text-align:left; font-family: 'Gilroy'; 
+                        font-weight: 500; padding-top: 20px; padding-bottom: 20px;">
+                        
+                        <a style="color: #6C60FF; text-decoration: none; font-weight: 600;" 
+                            href = "">@user.UserName</a>
                     </td>
-                    <td class="col-lg-4 pr-3" style="text-align:center">
+                    <td class="col-lg-3 pr-3" style="text-align:left; font-family: 'Gilroy'; 
+                        font-weight: 500; padding-top: 20px; padding-bottom: 20px; font-size: 15px;">
                         @user.UserOccupation
                     </td>
-                    <td class="col-lg-4" style="text-align:center">
-                        @user.UserCapacity
-                    </td>
-                </tr>   
-            }
-        </tbody>
-    </table>
-}*@
-
-<CollaborationForm buttonText = "Add Ticket" projectId = "@projectId" ticket = "@ticket" OnValidSubmit = "@CreateTicket"></CollaborationForm>
-
-@if (allUsers == null)
-{
-    <text>Loading..</text>
-}
-else if (allUsers.Length == 0)
-{
-    <text>No Record Found</text>
-}
-else
-{
-    <h3 class="mb-3 mt-4">Available Employees</h3>
-
-    <table class="table table-striped">
-        <thead class="table-dark">
-            <tr>
-                <th style="text-align:center">Name</th>
-                <th style="text-align:center">Occupation</th>
-                <th style="text-align:center">Capacity</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach(var user in allUsers)
-            {
-                <tr>
-                    <td class="col-lg-4" style="text-align:center; width:50%">
-                        @user.UserName
-                    </td>
-                    <td class="col-lg-4 pr-3" style="text-align:center">
-                        @user.UserOccupation
-                    </td>
-                    <td class="col-lg-4" style="text-align:center">
+                    <td class="col-lg-6" style="text-align:left; font-family: 'Gilroy'; 
+                        font-weight: 500; padding-top: 20px; padding-bottom: 20px; font-size: 15px; line-height:2.0;">
                         @user.UserCapacity
                     </td>
                 </tr>   

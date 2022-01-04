@@ -49,9 +49,20 @@ namespace ManagmentAppTestOne.Server.Models
 
         public async Task<CompanyEntity> Put(CompanyEntity company) 
         {
-            _applicationDbContext.Entry(company).State = EntityState.Modified;
-            await _applicationDbContext.SaveChangesAsync();
-            return company;
+            var chekdCompany = await GetCompanyByName(company.CompanyName);
+            if (chekdCompany == null) 
+            {
+                _applicationDbContext.Entry(company).State = EntityState.Modified;
+                await _applicationDbContext.SaveChangesAsync();
+                return company;
+            }
+            else
+            {
+                return null;
+            }
+                
+            
+            
         }
 
         /*private async Task<CompanyEntity> GetCompanyByName(string companyName)

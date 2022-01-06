@@ -7,6 +7,9 @@
 @*For redirecting purposes*@
 @inject NavigationManager Navigation
 
+@*For JS confirmations*@
+@inject IJSRuntime js
+
 
 <div class="container my-auto">
     <div class="row">
@@ -25,14 +28,22 @@
 
 
 
-
 @code {
 
     UserEntity user = new UserEntity();
 
     async Task CreateUser()
     {
-        await http.PostAsJsonAsync("api/user", user);
-        Navigation.NavigateTo("/users");
+        var result = await http.PostAsJsonAsync("api/user", user);
+        if (result.IsSuccessStatusCode)
+        {
+            Navigation.NavigateTo("/users");
+        }
+        else
+        {
+            await js.InvokeVoidAsync("alert", $"This user is already existing in the system");
+            Navigation.NavigateTo("/users");
+        }
+
     }
 }

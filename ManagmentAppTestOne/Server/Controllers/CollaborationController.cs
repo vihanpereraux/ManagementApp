@@ -41,8 +41,16 @@ namespace ManagmentAppTestOne.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<CollaborationEntity>> Post(CollaborationEntity collaboration)
         {
-            await _collaborationModel.Post(collaboration);
-            return new CreatedAtRouteResult("GetCollaboration", new { collaborationId = collaboration.CollaborationId }, collaboration);
+            var result = await _collaborationModel.Post(collaboration);
+            if( result != null )
+            {
+                return Ok(new CreatedAtRouteResult("GetCollaboration", new { collaborationId = collaboration.CollaborationId }, collaboration));
+            }
+            else 
+            {
+                return BadRequest();
+            }
+            /*return new CreatedAtRouteResult("GetCollaboration", new { collaborationId = collaboration.CollaborationId }, collaboration);*/
         }
 
         [HttpPut]

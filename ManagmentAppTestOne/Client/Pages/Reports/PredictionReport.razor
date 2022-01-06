@@ -1,0 +1,185 @@
+﻿@*Route*@
+@page "/predictionreport"
+
+@*Getting HttpClient class*@
+@inject HttpClient http
+
+@*For JS confirmations*@
+@inject IJSRuntime js
+
+@*For redirecting purposes*@
+@inject NavigationManager Navigation
+
+@inject ISyncLocalStorageService LocalStorage
+
+@*For JS confirmations*@
+@inject IJSRuntime js
+
+
+
+
+@if( companies != null )
+{
+    <div class="container report-section">
+        <div class="row">
+
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 my-auto">
+                <img class="report-img mx-auto d-block align-self-center" src="img/Report/Report Image.png">
+            </div>
+
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 my-auto">
+                <EditForm Model="@selectedCompany" OnValidSubmit="@LoadPrediction">
+                    <DataAnnotationsValidator></DataAnnotationsValidator>
+                        
+                    <h4 id="prediction-report-text">Generate <br> Progress Reports</h4>
+                    
+                    <div class="form-group">
+
+                        <label id="label-text" for="InputComapnyName">Select a Company</label>
+                        <InputSelect @bind-Value="selectedCompany.CompanyId" class="form-control"
+                            aria-describedby="emailHelp" placeholder="Enter company name">
+
+                            @foreach(var company in companies)
+                            {
+                                <option style="font-weight: 600;" value="@company.CompanyId">@company.CompanyName</option>    
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="@(() => selectedCompany.CompanyId)" />
+
+
+                        <label id="label-text" for="InputComapnyName">Start</label>
+                        <InputDate  @bind-Value="selectedCompany.EndDate" class="form-control"
+                            aria-describedby="emailHelp" placeholder="Enter project end date"></InputDate>
+                        <ValidationMessage For="@(() => selectedCompany.StartDate)" />
+
+
+                        <label id="label-text" for="InputComapnyName">End loku</label>
+                        <InputDate  @bind-Value="selectedCompany.StartDate" class="form-control"
+                            aria-describedby="emailHelp" placeholder="Enter project started date"></InputDate>
+                        <ValidationMessage For="@(() => selectedCompany.EndDate)" />
+
+                    </div>
+                    <button type="submit" class="btn report-generate-btn">Generate Preiction Report</button>
+
+                </EditForm>
+            </div> 
+            
+        </div>
+    </div>
+}
+
+
+
+@if (collaborations != null && selectedCompany.CompanyId != Guid.Empty)
+    {
+
+        <div class="container" style="margin-top: 40px;">
+            <div class="row">
+
+                <div class="col-lg-6 my-auto">
+                    @foreach (var company in companies)
+                    {
+                        if(selectedCompany.CompanyId == company.CompanyId)
+                        {
+                            <h5 class="prediction-headings">Herer's the Predicted Results for <span style="color: #6C60FF; font-weight: 600">
+                                @company.CompanyName</span> </h5>
+                        }
+                    }
+                    <p class="prediction-description">For the upcoming dates between 
+                        <span style="color: #6C60FF;">@selectedCompany.StartDate.ToShortDateString()</span> to 
+                        <span style="color: #6C60FF;">@selectedCompany.EndDate.ToShortDateString()</span> your company is going 
+                        to get <span style="color: #6C60FF;">@intpredeictedProjectCount</span> project(s) and to finish those projects 
+                        you need to collaborate with <span style="color: #6C60FF;">@predeictedEmployeeCount</span> 
+                        employees in your company.
+                    </p>
+                </div>
+
+                <div class="col-lg-6 my-auto">
+                    <img class="prediction-img mx-auto d-block align-self-center" src="img/Report/Prediction Image.png">
+                </div>
+            </div>
+        </div>
+}
+
+
+
+
+
+@code {
+
+    CompanyReportEntity selectedCompany = new CompanyReportEntity();
+
+    CompanyEntity[] companies { get; set; }
+
+    CollaborationEntity[] collaborations { get; set; }
+
+    ProjectEntity[] projects { get; set; }
+
+
+    float predeictedProjectCount;
+
+    int employeeCounter = 0;
+
+    int predeictedEmployeeCount = 0;
+
+    int intpredeictedProjectCount = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadCompanies();
+        await LoadProjects();
+    }
+
+    public async Task LoadCompanies()
+    {
+        companies = await http.GetFromJsonAsync<CompanyEntity[]>("api/company");
+    }
+
+    public async Task LoadProjects()
+    {
+        projects = await http.GetFromJsonAsync<ProjectEntity[]>($"api/project?{selectedCompany.CompanyId}");
+    }
+
+    public async Task LoadPrediction()
+    {
+        @if (selectedCompany.CompanyId == Guid.Empty)
+        {
+            await js.InvokeVoidAsync("alert", "Make sure to fill all the fields before generating the report");
+            Navigation.NavigateTo("/predictionreport");
+        }
+        else
+        {
+            var result = await http.GetFromJsonAsync<float>($"api/prediction?companyId={selectedCompany.CompanyId}");
+            float ProjectsforOneMonth = projects.Length / result;
+            Console.WriteLine(ProjectsforOneMonth);
+
+            float numOfMonths = ((selectedCompany.StartDate.Year - selectedCompany.EndDate.Year) * 12) + 
+                                selectedCompany.StartDate.Month - selectedCompany.EndDate.Month;
+            predeictedProjectCount = (ProjectsforOneMonth * numOfMonths);
+            intpredeictedProjectCount = (int)predeictedProjectCount;
+            Console.WriteLine(predeictedProjectCount);
+
+            await LoadEmployeePrediction();
+        }
+        
+    }
+
+    public async Task LoadEmployeePrediction()
+    {
+        collaborations = await http.GetFromJsonAsync<CollaborationEntity[]>("api/collaboration");
+        projects = await http.GetFromJsonAsync<ProjectEntity[]>($"api/project/{selectedCompany.CompanyId}");
+        foreach ( var collab in collaborations) 
+        {
+            foreach( var project in projects) 
+            {
+                if(collab.ProjectId == project.ProjectId) 
+                {
+                    employeeCounter++;
+                }
+            }
+        }
+        int intpredeictedProjectCount = (int)predeictedProjectCount;
+        predeictedEmployeeCount = (employeeCounter / projects.Length) * intpredeictedProjectCount;
+        Console.WriteLine(predeictedEmployeeCount);
+    }
+}

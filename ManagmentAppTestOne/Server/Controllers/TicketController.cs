@@ -41,8 +41,16 @@ namespace ManagmentAppTestOne.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<TicketEntity>> Post(TicketEntity ticket)
         {
-            await _ticketModel.Post(ticket);
-            return new CreatedAtRouteResult("GetTicket", new { TicketTitle = ticket.TicketTitle }, ticket);
+            var result = await _ticketModel.Post(ticket);
+            if( result != null) 
+            {
+                return Ok(new CreatedAtRouteResult("GetTicket", new { TicketTitle = ticket.TicketTitle }, ticket));
+            }
+            else
+            {
+                return BadRequest();
+            }
+            /*return new CreatedAtRouteResult("GetTicket", new { TicketTitle = ticket.TicketTitle }, ticket);*/
         }
 
         [HttpPut]

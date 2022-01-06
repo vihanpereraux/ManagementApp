@@ -39,3 +39,31 @@
     margin-top: 60px;
     margin-bottom: 100px;
 }
+
+
+.prediction-img {
+    width: 70%;
+}
+
+#prediction-report-text {
+    line-height: 1.4;
+    font-family: 'Gilroy';
+    font-weight: 600;
+    font-size: 30px;
+    margin-bottom: 40px;
+    padding-top: 10px;
+}
+
+.prediction-headings {
+    font-family: 'Gilroy';
+    font-weight: 600;
+    /*margin-top: 90px;*/
+}
+
+.prediction-description {
+    font-family: 'Gilroy';
+    font-weight: 600;
+    margin-top: 30px;
+    font-size: 16px;
+    line-height: 1.7;
+}

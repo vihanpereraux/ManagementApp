@@ -50,7 +50,7 @@ else
                                 </InputSelect>
                                 <ValidationMessage For="@(() => selectedUser.UserId)" />
                          </div>
-                    <button type="submit" class="btn report-generate-btn">Generate Progress Report</button>
+                        <button type="submit" class="btn report-generate-btn">Generate Progress Report</button>
                 </EditForm>
 
             </div>
@@ -364,10 +364,18 @@ else
 
     public async Task LoadTickets()
     {
-        tickets = await http.GetFromJsonAsync<TicketEntity[]>($"api/report/{selectedUser.UserId}");
-        length = tickets.Length;
-        await GetChart();
-        await GetCompletedChart();
+        @if (selectedUser.UserId == Guid.Empty)
+        {
+            await js.InvokeVoidAsync("alert", "Make sure to fill all the fields before generating the report");
+            Navigation.NavigateTo("/reports");
+        }
+        else
+        {
+            tickets = await http.GetFromJsonAsync<TicketEntity[]>($"api/report/{selectedUser.UserId}");
+            length = tickets.Length;
+            await GetChart();
+            await GetCompletedChart();   
+        }
     }
 
     public async Task LoadUsers()

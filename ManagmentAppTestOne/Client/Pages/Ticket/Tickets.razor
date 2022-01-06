@@ -15,27 +15,42 @@
 @using System.Linq;
 
 
+<div class="container">
+    <div class="row">
+
+        <div class="col-lg-6 my-auto">
+            @if ( projects != null )
+            {
+                @foreach (var item in projects)
+                {
+                    if(projectId == item.ProjectId)
+                    {
+                        <h3 class="company-heading">Discover <br> <span style="color: #8676FF">
+                            @item.ProjectName </span> Tickets
+                        </h3>
+                    }   
+                }
+            }
+        </div>
+
+        <div class="col-lg-6 my-auto">
+            <a class="btn add-company-btn" href="/tickets/create/@projectId"><p>Add ticket</p></a>
+        </div>
+
+    </div>
+</div>
+
+
 @if (tickets == null && users == null)
 {
-    <text>Loading..</text>
+    <p style="color: #6C60FF;" class="container mt-5">Loading your projects</p>
 }
 else if (tickets.Length == 0)
 {
-    <text>No Record Found</text>
+    <p style="color: #FF615A;" class="container mt-5">No tickets availabe for this project</p>
 }
 else
 {
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6 my-auto">
-                <h3 class="company-heading">Discover <br> Your Project Tickets</h3>
-            </div>
-            <div class="col-lg-6 my-auto">
-                <a class="btn add-company-btn" href="/tickets/create/@projectId"><p>Add ticket</p></a>
-            </div>
-        </div>
-    </div>
-
     <table class="table">
         <thead class="table-header">
             <tr>
@@ -64,7 +79,7 @@ else
                         @ticket.TicketState
                     </td>
                     <td class="col-lg-2" style="text-align:center; font-family: 'Gilroy'; 
-                        font-weight: 500; padding-top: 20px; padding-bottom: 20px; font-size: 15px;">                         
+                        font-weight: 500; padding-top: 20px; padding-bottom: 20px; font-size: 15px;">  
                         @foreach( var user in users )
                         {
                             @if( @ticket.UserId == @user.UserId )
@@ -86,28 +101,30 @@ else
 
 <div style="margin-top: 100px;"></div>
 
+<div class="container">
+    <div class="row">
+
+        <div class="col-lg-6 my-auto">
+            <h3 class="company-heading">Already <br> Assigned Employees</h3>
+        </div>
+
+        <div class="col-lg-6 my-auto">
+            <a class="btn add-company-btn" href="/collaboration/create/@projectId"><p>Assign employee</p></a>
+        </div>
+
+    </div>
+</div>
 
 @if (users == null)
 {
-    <text>Loading..</text>
+    <p style="color: #6C60FF;" class="container mt-5">Loading assigned users</p>
 }
 else if (users.Length == 0)
 {
-    <text>No Record Found</text>
+    <p style="color: #FF615A;" class="container mt-5">No assigned users for this project</p>
 }
 else
 {   
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6 my-auto">
-                <h3 class="company-heading">Already <br> Assigned Employees</h3>
-            </div>
-            <div class="col-lg-6 my-auto">
-                <a class="btn add-company-btn" href="/collaboration/create/@projectId"><p>Assign employee</p></a>
-            </div>
-        </div>
-    </div>
-
     <table class="table">
         <thead class="table-header">
             <tr>
@@ -203,7 +220,24 @@ else
 
     async Task DeleteCollaboration(Guid userId)
     {
-        foreach (var collaboration in collaborations)
+        bool isUserId = false;
+        foreach(var item in tickets)
+        {
+            if(userId == item.UserId && item.ProjectId == projectId)
+            {
+                isUserId = true;
+                //await js.InvokeVoidAsync("alert", $"{item.TicketTitle}");
+            }
+        }
+
+        if (isUserId == true)
+        {
+            await js.InvokeVoidAsync("alert", $"This user is associated with a ticket(s). Assign relevant ticket(s) to " +
+                                        "another employee before removing the user from the project.");
+        }
+        else
+        {
+            foreach (var collaboration in collaborations)
             {   
                 if(collaboration.UserId == userId && collaboration.ProjectId == projectId)
                 {
@@ -211,6 +245,18 @@ else
                 }
             }
             await LoadTickets();
+        }
+
+
+
+        /*foreach (var collaboration in collaborations)
+        {   
+            if(collaboration.UserId == userId && collaboration.ProjectId == projectId)
+            {
+                await http.DeleteAsync($"api/collaboration/{collaboration.CollaborationId}");
+            }
+        }
+        await LoadTickets();*/
     }
 
 }

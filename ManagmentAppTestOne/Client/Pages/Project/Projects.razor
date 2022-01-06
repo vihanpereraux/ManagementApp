@@ -15,28 +15,30 @@
 @using System.Collections
 
 
+<div class="container">
+    <div class="row">
+
+        <div class="col-lg-6 my-auto">
+            <h3 class="company-heading">Discover <br> <span style="color: #8676FF">@companyName</span> Projects </h3>
+        </div>
+
+        <div class="col-lg-6 my-auto">
+            <a class="btn add-company-btn" href="/projects/create/@companyId/@companyName"><p>Add Project</p></a>
+        </div>
+
+    </div>
+</div>
+
 @if (projects == null)
 {
-    <text>Loading..</text>
+    <p style="color: #6C60FF;" class="container mt-5">Loading your projects</p>
 }
 else if (projects.Length == 0)
 {
-    <text>No Record Found</text>
+    <p style="color: #FF615A;" class="container mt-5">No projects availabe for this company</p>
 }
 else
 {
-
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6 my-auto">
-                <h3 class="company-heading">Discover <br> <span style="color: #8676FF">@companyName</span> Projects </h3>
-            </div>
-            <div class="col-lg-6 my-auto">
-                <a class="btn add-company-btn" href="/projects/create/@companyId"><p>Add Project</p></a>
-            </div>
-        </div>
-    </div>
-
     <table class="table">
         <thead class="table-header">
             <tr>

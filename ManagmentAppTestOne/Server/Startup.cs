@@ -54,6 +54,7 @@ namespace ManagmentAppTestOne.Server
             services.AddScoped<ITicketModel, TicketModel>();
             services.AddScoped<IAuthModel, AuthModel>();
             services.AddScoped<IReportModel, ReportModel>();
+            services.AddScoped<IPredictionModel, PredictionModel>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();

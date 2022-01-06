@@ -24,7 +24,12 @@ namespace ManagmentAppTestOne.Client
 
             builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 
-            builder.Services.AddBlazoredLocalStorage();
+            /*builder.Services.AddHttpClient<IReportCalculationService, ReportCalculationService>(client =>
+            {
+                client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress);
+            });*/
+
+        builder.Services.AddBlazoredLocalStorage();
 
             builder.Services.AddOptions();
 

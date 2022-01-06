@@ -46,8 +46,8 @@
         }
         else
         {
-            await js.InvokeVoidAsync("alert", $"This project is already existing in the system");
-            Navigation.NavigateTo("/companies");
+            await js.InvokeVoidAsync("alert", $"This company is already existing in the system");
+            Navigation.NavigateTo("/companies/create");
         }
         
     }

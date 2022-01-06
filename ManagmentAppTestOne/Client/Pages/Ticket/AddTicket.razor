@@ -7,6 +7,9 @@
 @*For redirecting purposes*@
 @inject NavigationManager Navigation
 
+@*For JS confirmations*@
+@inject IJSRuntime js
+
 
 <div class="container my-auto">
         <div class="row">
@@ -91,8 +94,17 @@ else
     async Task CreateTicket()
     {
         ticket.ProjectId = projectId;
-        await http.PostAsJsonAsync("api/ticket", ticket);
-        Navigation.NavigateTo($"/tickets/{projectId}");
+        var result = await http.PostAsJsonAsync("api/ticket", ticket);
+        if (result.IsSuccessStatusCode)
+        {
+            Navigation.NavigateTo($"/tickets/{projectId}");
+        }
+        else
+        {
+            await js.InvokeVoidAsync("alert", $"This ticket is already existing in the system");
+            Navigation.NavigateTo($"/tickets/create/{projectId}");
+        }
+        
     }
 
 }

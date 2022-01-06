@@ -1,6 +1,7 @@
 ﻿using ManagmentAppTestOne.Server.Data;
 using ManagmentAppTestOne.Server.Models;
 using ManagmentAppTestOne.Shared.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;

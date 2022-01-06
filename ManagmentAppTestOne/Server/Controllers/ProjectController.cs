@@ -44,8 +44,16 @@ namespace ManagmentAppTestOne.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<ProjectEntity>> Post(ProjectEntity project)
         {
-            await _projectModel.Post(project);
-            return new CreatedAtRouteResult("GetProject", new { ProjectName = project.ProjectName }, project);
+            var result = await _projectModel.Post(project);
+            if(result != null) 
+            {
+                return Ok(new CreatedAtRouteResult("GetProject", new { ProjectName = project.ProjectName }, project));
+            }
+            else
+            {
+                return BadRequest();
+            }
+            /*return new CreatedAtRouteResult("GetProject", new { ProjectName = project.ProjectName }, project);*/
         }
 
         [HttpPut]

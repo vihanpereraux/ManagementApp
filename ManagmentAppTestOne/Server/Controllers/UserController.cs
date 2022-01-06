@@ -43,7 +43,7 @@ namespace ManagmentAppTestOne.Server.Controllers
             }
             else 
             {
-                return BadRequest(result);
+                return BadRequest();
             }
             
             //return new CreatedAtRouteResult("GetUser", new { userName = userModel.UserName }, userModel);

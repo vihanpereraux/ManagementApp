@@ -1,11 +1,15 @@
 ﻿@*Route*@
-@page "/projects/create/{companyId:guid}"
+@page "/projects/create/{companyId:guid}/{companyName}"
 
 @*Getting HttpClient class*@
 @inject HttpClient http
 
 @*For redirecting purposes*@
 @inject NavigationManager Navigation
+
+@*For JS confirmations*@
+@inject IJSRuntime js
+
 
 
 <div class="container my-auto">
@@ -27,13 +31,24 @@
 
     [Parameter] public Guid companyId { get; set; }
 
+    [Parameter] public string companyName { get; set; }
+
     ProjectEntity project = new ProjectEntity();
 
 
     async Task CreateProject()
     {
         project.CompanyId = companyId;
-        await http.PostAsJsonAsync("api/project", project);
-        Navigation.NavigateTo($"/projects/{companyId}");
+        var result = await http.PostAsJsonAsync("api/project", project);
+        if (result.IsSuccessStatusCode)
+        {
+            Navigation.NavigateTo($"/projects/{companyId}/{companyName}");
+        }
+        else
+        {
+            await js.InvokeVoidAsync("alert", $"This project is already existing in the system");
+            Navigation.NavigateTo($"/projects/create/{companyId}/{companyName}");
+        }
+
     }
 }

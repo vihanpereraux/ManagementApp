@@ -1,0 +1,317 @@
+﻿@*Route*@
+@page "/companyreports"
+
+@*Getting HttpClient class*@
+@inject HttpClient http
+
+@*For JS confirmations*@
+@inject IJSRuntime js
+
+@*For redirecting purposes*@
+@inject NavigationManager Navigation
+
+@inject ISyncLocalStorageService LocalStorage
+
+
+
+
+@if (companies == null)
+{
+    <text>Loading..</text>
+}
+else if (companies.Length == 0)
+{
+    <text>No comps available to generate reports</text>
+}
+else
+{
+    <div class="container report-section">
+        <div class="row">
+
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 my-auto">
+                <img class="report-img mx-auto d-block align-self-center" src="img/Report/Report Image.png">
+            </div>
+
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 my-auto">
+                    
+                <EditForm Model="@selectedCompany" OnValidSubmit="@LoadProjects">
+                    <DataAnnotationsValidator></DataAnnotationsValidator>
+                        
+                        <h4 id="generate-report-text">Generate <br> Progress Reports</h4>
+
+                        <div class="form-group">
+
+                            <label id="label-text" for="InputComapnyName">Select a user</label>
+                            <InputSelect @bind-Value="selectedCompany.CompanyId" class="form-control"
+                                aria-describedby="emailHelp" placeholder="Enter company name">
+
+                                @foreach(var company in companies)
+                                {
+                                    <option style="font-weight: 600;" value="@company.CompanyId">@company.CompanyName</option>    
+                                }
+                            </InputSelect>
+                            <ValidationMessage For="@(() => selectedCompany.CompanyId)" />
+
+
+                            <label id="label-text" for="InputComapnyName">Select a date from this</label>
+                            <InputDate  @bind-Value="selectedCompany.EndDate" class="form-control"
+                                aria-describedby="emailHelp" placeholder="Enter project end date"></InputDate>
+                            <ValidationMessage For="@(() => selectedCompany.StartDate)" />
+
+
+                            <label id="label-text" for="InputComapnyName">To this</label>
+                            <InputDate  @bind-Value="selectedCompany.StartDate" class="form-control"
+                                aria-describedby="emailHelp" placeholder="Enter project started date"></InputDate>
+                            <ValidationMessage For="@(() => selectedCompany.EndDate)" />
+
+                         </div>
+
+                        <button type="submit" class="btn report-generate-btn">Generate Progress Report</button>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+
+@if (projects != null)
+{
+    foreach (var company in companies)
+    {
+        if(selectedCompany.CompanyId == company.CompanyId)
+        {
+            <h5 class="report-table-headings">Completed <span style="color: #6C60FF;">Projects</span> 
+                of @company.CompanyName</h5>
+        }
+    }
+
+    <table class="table">
+        <thead class="table-header">
+            <tr>
+                <th style="text-align:left; font-weight: 600; padding-top: 20px; padding-bottom: 20px;">Project</th>
+                <th style="text-align:left; font-weight: 600; padding-top: 20px; padding-bottom: 20px;">Details</th>
+                <th style="text-align:center; font-weight: 600; padding-top: 20px; padding-bottom: 20px;">Es. Date</th>
+                <th style="text-align:center; font-weight: 600; padding-top: 20px; padding-bottom: 20px;">Status</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach(var project in projects)
+            {
+                @if ( project.ProjectStatus == "Completed" )
+                {
+                    <tr>
+                        <td class="col-lg-3" style="text-align:left; font-family: 'Gilroy'; 
+                            font-weight: 500; padding-top: 20px; padding-bottom: 20px;">
+                            <span style="color: #6C60FF; font-weight: 600;">@project.ProjectName</span>
+                        </td>
+
+                        <td class="col-lg-5" style="text-align:left; font-family: 'Gilroy'; 
+                            font-weight: 500; padding-top: 20px; padding-bottom: 20px; font-size: 15px; line-height:2.0">
+                            @project.ProjectDescription
+                        </td>
+
+                        <td class="col-lg-2" style="text-align:center; font-family: 'Gilroy'; 
+                            font-weight: 500; padding-top: 20px; padding-bottom: 20px;">
+                            @project.ProjectStatus   
+                        </td>
+
+                        <td class="col-lg-2" style="text-align:center; font-family: 'Gilroy'; 
+                            font-weight: 500; padding-top: 20px; padding-bottom: 20px; font-size: 15px; line-height:2.0">
+                            @project.ProjectStartedDate.ToShortDateString()
+                        </td>
+                    </tr>
+                } 
+            }
+        </tbody>
+    </table>
+
+    <div class="container chart-section">
+        <div class="row">
+
+            <div class="col-lg-6 my-auto">
+                <div style="width:500px; height:200px;" id="project_chart" class="mx-auto d-block"></div>
+            </div>
+
+            <div class="col-lg-6 my-auto">
+                <p class="mx-auto d-block">
+                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
+                when an unknown printer took a galley of type and scrambled it to make a type 
+                specimen book. It has survived not only five centuries, but also the leap into 
+                electronic typesetting, remaining essentially unchanged.
+                </p>
+            </div>
+
+        </div>
+    </div>
+}
+
+
+
+
+
+@if (tickets != null)
+{
+
+    @foreach (var company in companies)
+    {
+        if(selectedCompany.CompanyId == company.CompanyId)
+        {
+            <h5 class="report-table-headings">Completed <span style="color: #6C60FF;">Tickets</span> 
+                of @company.CompanyName</h5>
+        }
+    }
+
+    
+    <table class="table">
+        <thead class="table-header">
+            <tr>
+                <th style="text-align:left; font-weight: 600; padding-top: 20px; padding-bottom: 20px;">Ticket</th>
+                <th style="text-align:left; font-weight: 600; padding-top: 20px; padding-bottom: 20px;">Description</th>
+                <th style="text-align:center; font-weight: 600; padding-top: 20px; padding-bottom: 20px;">Es. Date</th>
+                <th style="text-align:center; font-weight: 600; padding-top: 20px; padding-bottom: 20px;">Status</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach(var project in projects)
+            {
+                @foreach (var ticket in tickets)
+                {
+                    if( project.ProjectId == ticket.ProjectId && ticket.TicketState == "Completed" )
+                    {
+                        <tr>
+                            <td class="col-lg-3" style="text-align:left; font-family: 'Gilroy'; 
+                                font-weight: 500; padding-top: 20px; padding-bottom: 20px;">
+                                <span style="color: #6C60FF; font-weight: 600;">@ticket.TicketTitle</span>
+                            </td>
+
+                            <td class="col-lg-5" style="text-align:left; font-family: 'Gilroy'; 
+                                font-weight: 500; padding-top: 20px; padding-bottom: 20px; font-size: 15px; line-height:2.0">
+                                @ticket.TicketDescription
+                            </td>
+
+                            <td class="col-lg-2" style="text-align:center; font-family: 'Gilroy'; 
+                                font-weight: 500; padding-top: 20px; padding-bottom: 20px; font-size: 15px; line-height:2.0">
+                                @ticket.TicketState
+                            </td>
+
+                            <td class="col-lg-2" style="text-align:center; font-family: 'Gilroy'; 
+                                font-weight: 500; padding-top: 20px; padding-bottom: 20px;">
+                                @ticket.TicketStartedDate.ToShortDateString()   
+                            </td>
+                        </tr>
+                    }
+                } 
+            }
+        </tbody>
+    </table>
+
+    <div class="container chart-section">
+        <div class="row">
+
+            <div class="col-lg-6 my-auto">
+                <div style="width:500px; height:200px;" id="ticket_chart" class="mx-auto d-block"></div>
+            </div>
+
+            <div class="col-lg-6 my-auto">
+                <p class="mx-auto d-block">
+                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
+                when an unknown printer took a galley of type and scrambled it to make a type 
+                specimen book. It has survived not only five centuries, but also the leap into 
+                electronic typesetting, remaining essentially unchanged.
+                </p>
+            </div>
+
+        </div>
+    </div>
+}
+
+
+
+
+@code {
+
+    CompanyReportEntity selectedCompany = new CompanyReportEntity();
+
+    CompanyEntity[] companies { get; set; }
+
+    ProjectEntity[] projects { get; set; }
+
+    TicketEntity[] tickets { get; set; }
+
+    int length;
+    int ticketLength;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadCompanies();
+    }
+
+    public async Task LoadCompanies()
+    {
+        companies = await http.GetFromJsonAsync<CompanyEntity[]>("api/company");
+    }
+
+    public async Task LoadProjects()
+    {
+        @if (selectedCompany.CompanyId == Guid.Empty)
+        {
+            await js.InvokeVoidAsync("alert", "Make sure to fill all the fields before generating the report");
+            Navigation.NavigateTo("/companyreports");
+        }
+        else
+        {
+            projects = await http.GetFromJsonAsync<ProjectEntity[]>($"api/project/{selectedCompany.CompanyId}");
+            length = projects.Length;
+            await LoadTicekts();
+            await GetCompletedProjectChart();
+            await GetCompletedTicketChart();
+        }
+    }
+
+    public async Task GetCompletedProjectChart()
+    {
+        int completedCounter = 0;
+        foreach (var item in projects)
+        {
+            if( item.ProjectStatus == "Completed" )
+            {
+                completedCounter++;
+            }
+        }
+        await js.InvokeVoidAsync("CompletedProjectChart", length, completedCounter);
+    }
+
+    public async Task GetCompletedTicketChart()
+    {
+        int completedTicketCounter = 0;
+        foreach (var project in projects)
+        {
+            foreach (var ticket in tickets)
+            {
+                if ( project.ProjectId == ticket.ProjectId && ticket.TicketState == "Completed" )
+                {
+                    completedTicketCounter++;
+                }
+            }   
+        }
+        Console.WriteLine(completedTicketCounter);
+        Console.WriteLine(ticketLength);
+        await js.InvokeVoidAsync("CompletedTicketChart", ticketLength, completedTicketCounter);
+    }
+
+    /*public async Task LoadTicekts()
+        {
+        tickets = await http.GetFromJsonAsync<TicketEntity[]>($"api/report");
+    }*/
+
+    public async Task LoadTicekts()
+    {
+        tickets = await http.GetFromJsonAsync<TicketEntity[]>($"api/report/getrelevanttickets?StartDate={selectedCompany.StartDate}&EndDate={selectedCompany.EndDate}");
+        ticketLength = tickets.Length;
+    }
+     
+}

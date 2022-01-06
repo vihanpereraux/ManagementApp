@@ -14,27 +14,31 @@
 
 
 
+
+<div class="container">
+    <div class="row">
+
+        <div class="col-lg-6 my-auto">
+            <h3 class="company-heading">Discover <br> Your Companies</h3>
+        </div>
+
+        <div class="col-lg-6 my-auto">
+            <a class="btn add-company-btn" href="/companies/create"><p>Add company</p></a>
+        </div>
+
+    </div>
+</div>
+
 @if (companies == null)
 {
-    <text>Loading..</text>
+    <text>Companies are loading..</text>
 }
 else if (companies.Length == 0)
 {
     <text>No Record Found</text>
 }
 else
-{
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6 my-auto">
-                <h3 class="company-heading">Discover <br> Your Companies</h3>
-            </div>
-            <div class="col-lg-6 my-auto">
-                <a class="btn add-company-btn" href="/companies/create"><p>Add company</p></a>
-            </div>
-        </div>
-    </div>
-
+{   
     <table class="table">
         <thead class="table-header">
             <tr>

@@ -7,6 +7,9 @@
 @*For redirecting purposes*@
 @inject NavigationManager Navigation
 
+@*For JS confirmations*@
+@inject IJSRuntime js
+
 
 @if (users == null)
 {
@@ -82,7 +85,16 @@ else
     async Task CreateCollaboration()
     {
         collaboration.ProjectId = projectId;
-        await http.PostAsJsonAsync("api/collaboration", collaboration);
-        Navigation.NavigateTo($"tickets/{projectId}");
+        var result = await http.PostAsJsonAsync("api/collaboration", collaboration);
+        if(result.IsSuccessStatusCode)
+        {
+            Navigation.NavigateTo($"tickets/{projectId}");
+        }
+        else
+        {
+            await js.InvokeVoidAsync("alert", $"This user is already assigned to the project");
+            Navigation.NavigateTo($"/collaboration/create/{projectId}");
+        }
+        
     }
 }

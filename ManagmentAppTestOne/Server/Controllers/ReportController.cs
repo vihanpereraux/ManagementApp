@@ -1,4 +1,5 @@
 ﻿using ManagmentAppTestOne.Server.Models;
+using ManagmentAppTestOne.Shared.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -20,15 +21,30 @@ namespace ManagmentAppTestOne.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetTickets() 
+        public async Task<ActionResult> GetTickets()
         {
             return Ok(await _reportModel.GetTickets());
         }
 
         [HttpGet("{userId:guid}")]
-        public async Task<ActionResult> GetTicketsByUser(Guid userId) 
+        public async Task<ActionResult> GetTicketsByUser(Guid userId)
         {
             return Ok(await _reportModel.GetUserTickets(userId));
+        }
+
+        [HttpGet]
+        [Route("getrelevanttickets")]
+        public async Task<ActionResult<TicketEntity>> Get(DateTime StartDate, DateTime EndDate)
+        {
+            var result = Ok(await _reportModel.GetRelevantTickets(StartDate, EndDate));
+            if(result != null) 
+            {
+                return result;
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
     }
 }
